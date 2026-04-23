@@ -4,6 +4,12 @@ This repository benchmarks **runtime-aware QAOA** on the constrained random-bond
 
 The active package surface is `spinmesh_runtime`; historical import shims remain only for backward compatibility.
 
+## Snapshot
+
+**Headline result:** In the `paper_full` benchmark, the deployment recommendation remained `run_classical` with `exact_feasible` (expected approximation ratio `1.0`, expected valid ratio `1.0`), while matched-call sample efficiency still favored `bo_fourier` and valid-ratio collapse appeared in `100%` of aggregated QAOA windows.
+
+![Runtime-aware QAOA performance profile](results/paper_full/submission_full_performance_profile.png)
+
 ## Research question
 
 > Under realistic shot, routing, mitigation, and session-management constraints, when does runtime-aware QAOA improve constrained J1-J2 Ising ground-state approximation quality over strong classical baselines and lower-cost QAOA tuning strategies?
