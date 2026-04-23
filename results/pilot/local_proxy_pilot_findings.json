@@ -1,0 +1,231 @@
+{
+  "question_1_sample_efficiency": {
+    "question": "Does BO-tuned Fourier QAOA beat SPSA-tuned QAOA in sample efficiency?",
+    "bo_fourier_auc": -0.2169472082739349,
+    "spsa_fourier_auc": -0.2169472082739349,
+    "p_value_gap": 1.0,
+    "p_value_ratio": 1.0,
+    "winner": "spsa_fourier",
+    "delta_auc": 0.0
+  },
+  "question_2_mitigation": {
+    "question": "Does readout mitigation + ZNE materially improve feasible-energy quality under shot noise?",
+    "mean_gain": 0.0,
+    "mean_psucc_gain": 0.025467805054183557,
+    "best_window": {
+      "method": "bo_direct",
+      "regime": "clustered",
+      "n_assets": 4,
+      "budget": 2,
+      "depth": 1,
+      "noise_level": 0.0,
+      "mitigation_gain": 0.0,
+      "shot_budget": 32
+    },
+    "positive_gain_share": 0.0
+  },
+  "question_3_valid_ratio_collapse": {
+    "question": "How does valid-ratio collapse as asset count, depth, and noise rise?",
+    "collapse_share": 1.0,
+    "first_collapse_window": {
+      "method": "bo_direct",
+      "regime": "clustered",
+      "n_assets": 4,
+      "budget": 2,
+      "depth": 1,
+      "noise_level": 0.0,
+      "mean_gap": 0.0
+    },
+    "worst_valid_ratio_window": {
+      "method": "spsa_fourier",
+      "regime": "clustered",
+      "n_assets": 6,
+      "budget": 3,
+      "depth": 1,
+      "noise_level": 0.0,
+      "mean_valid_ratio": 0.2737626343982207
+    }
+  },
+  "performance_profile_leaderboard": [
+    {
+      "method": "bo_direct",
+      "profile_area": 1.0
+    },
+    {
+      "method": "bo_fourier",
+      "profile_area": 1.0
+    },
+    {
+      "method": "local_search",
+      "profile_area": 1.0
+    },
+    {
+      "method": "random_fourier",
+      "profile_area": 1.0
+    },
+    {
+      "method": "random_search",
+      "profile_area": 1.0
+    },
+    {
+      "method": "simulated_annealing",
+      "profile_area": 1.0
+    },
+    {
+      "method": "spsa_fourier",
+      "profile_area": 1.0
+    },
+    {
+      "method": "greedy",
+      "profile_area": 0.715625
+    },
+    {
+      "method": "classical_bo_surrogate",
+      "profile_area": 0.190625
+    }
+  ],
+  "fairness_table": [
+    {
+      "family": "classical_baseline",
+      "method": "exact_feasible",
+      "mitigation_label": "none",
+      "mean_gap": 0.0,
+      "mean_ratio": 1.0,
+      "mean_psucc": 1.0,
+      "mean_runtime_seconds": 0.0,
+      "mean_runtime_per_call": null,
+      "mean_total_shots": 0.0,
+      "mean_shots_per_call": null,
+      "mean_objective_calls": 0.0
+    },
+    {
+      "family": "classical_baseline",
+      "method": "local_search",
+      "mitigation_label": "none",
+      "mean_gap": 0.0,
+      "mean_ratio": 1.0,
+      "mean_psucc": 1.0,
+      "mean_runtime_seconds": 0.0,
+      "mean_runtime_per_call": null,
+      "mean_total_shots": 0.0,
+      "mean_shots_per_call": null,
+      "mean_objective_calls": 0.0
+    },
+    {
+      "family": "classical_baseline",
+      "method": "random_search",
+      "mitigation_label": "none",
+      "mean_gap": 0.0,
+      "mean_ratio": 1.0,
+      "mean_psucc": 1.0,
+      "mean_runtime_seconds": 0.0,
+      "mean_runtime_per_call": null,
+      "mean_total_shots": 0.0,
+      "mean_shots_per_call": null,
+      "mean_objective_calls": 0.0
+    },
+    {
+      "family": "classical_baseline",
+      "method": "simulated_annealing",
+      "mitigation_label": "none",
+      "mean_gap": 0.0,
+      "mean_ratio": 1.0,
+      "mean_psucc": 1.0,
+      "mean_runtime_seconds": 0.0,
+      "mean_runtime_per_call": null,
+      "mean_total_shots": 0.0,
+      "mean_shots_per_call": null,
+      "mean_objective_calls": 0.0
+    },
+    {
+      "family": "qaoa",
+      "method": "random_fourier",
+      "mitigation_label": "readout+zne",
+      "mean_gap": 0.0,
+      "mean_ratio": 1.0,
+      "mean_psucc": 0.27963545626921604,
+      "mean_runtime_seconds": 0.0026897788047790527,
+      "mean_runtime_per_call": 0.0008965929349263508,
+      "mean_total_shots": 800.0,
+      "mean_shots_per_call": 266.6666666666667,
+      "mean_objective_calls": 2.0
+    },
+    {
+      "family": "qaoa",
+      "method": "bo_fourier",
+      "mitigation_label": "readout+zne",
+      "mean_gap": 0.0,
+      "mean_ratio": 1.0,
+      "mean_psucc": 0.2625882835071722,
+      "mean_runtime_seconds": 0.003136157989501953,
+      "mean_runtime_per_call": 0.0010453859965006511,
+      "mean_total_shots": 800.0,
+      "mean_shots_per_call": 266.6666666666667,
+      "mean_objective_calls": 2.0
+    },
+    {
+      "family": "qaoa",
+      "method": "random_fourier",
+      "mitigation_label": "none",
+      "mean_gap": 0.0,
+      "mean_ratio": 1.0,
+      "mean_psucc": 0.24755859375,
+      "mean_runtime_seconds": 0.0036056935787200928,
+      "mean_runtime_per_call": 0.0007211387157440185,
+      "mean_total_shots": 640.0,
+      "mean_shots_per_call": 128.0,
+      "mean_objective_calls": 4.0
+    },
+    {
+      "family": "qaoa",
+      "method": "bo_direct",
+      "mitigation_label": "readout+zne",
+      "mean_gap": 0.0,
+      "mean_ratio": 1.0,
+      "mean_psucc": 0.28121828069839366,
+      "mean_runtime_seconds": 0.003866627812385559,
+      "mean_runtime_per_call": 0.001288875937461853,
+      "mean_total_shots": 800.0,
+      "mean_shots_per_call": 266.6666666666667,
+      "mean_objective_calls": 2.0
+    }
+  ],
+  "bootstrap_confidence_intervals": {
+    "qaoa_approximation_ratio": {
+      "low": 1.0,
+      "high": 1.0
+    },
+    "qaoa_p_succ": {
+      "low": 0.22722860386988594,
+      "high": 0.26609339225628764
+    }
+  },
+  "paired_method_deltas": [
+    {
+      "left_method": "bo_fourier",
+      "right_method": "spsa_fourier",
+      "metric": "approximation_ratio",
+      "mean_delta": 0.0,
+      "median_delta": 0.0,
+      "ci_low": 0.0,
+      "ci_high": 0.0,
+      "win_rate_left": 0.0
+    },
+    {
+      "left_method": "bo_fourier",
+      "right_method": "random_fourier",
+      "metric": "approximation_ratio",
+      "mean_delta": 0.0,
+      "median_delta": 0.0,
+      "ci_low": 0.0,
+      "ci_high": 0.0,
+      "win_rate_left": 0.0
+    }
+  ],
+  "takeaway": [
+    "Matched-call sample efficiency favors spsa_fourier.",
+    "Mitigation helps most in a narrow window at n=4, depth=1, noise=0.000, shots=32.",
+    "Valid-ratio collapse (<0.5) appears in 100.0% of aggregated QAOA windows.",
+    "Best Dolan-Mor\u00e9 profile area: bo_direct."
+  ]
+}

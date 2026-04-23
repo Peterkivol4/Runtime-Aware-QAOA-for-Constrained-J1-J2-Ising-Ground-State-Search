@@ -1,0 +1,27 @@
+{
+  "observed_date": "2026-04-13",
+  "timezone": "Asia/Kuala_Lumpur",
+  "backend": "ibm_fez",
+  "runtime_mode": "runtime_v2",
+  "execution_mode": "backend",
+  "client_log_start_timestamp": "2026-04-13 22:50:21",
+  "plan_note": "IBM Runtime selected the open-instance plan. Session mode was rejected for this account tier, so the live smoke workload was run in backend mode instead.",
+  "session_mode_error": {
+    "http_status": 400,
+    "code": 1352,
+    "message": "Open plan is not authorized to run a session; use a different execution mode."
+  },
+  "result": {
+    "best_energy": -0.21806962287491638,
+    "exact_energy": -0.27263459418542246,
+    "valid_ratio": 0.5546875,
+    "success": false,
+    "measurement_success_probability": 0.0,
+    "final_bitstring": "100011"
+  },
+  "notes": [
+    "This artifact captures a single live-QPU smoke run, not a benchmark sweep.",
+    "The workload returned a real measurement result after transpilation to the backend ISA width.",
+    "Do not treat this as checkpointed session-resume certification."
+  ]
+}

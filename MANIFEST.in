@@ -1,0 +1,10 @@
+include README.md
+include LICENSE
+include requirements.txt
+include requirements-dev.txt
+recursive-include docs *.md
+recursive-include tools *.py
+recursive-include tests *.py
+recursive-include .github *.yml
+include setup.py
+recursive-include src/ionmesh_runtime/_native *.c

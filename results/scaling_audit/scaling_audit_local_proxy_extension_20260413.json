@@ -1,0 +1,111 @@
+{
+  "observed_at": "2026-04-13T23:50:20+08:00",
+  "runtime_mode": "local_proxy",
+  "budget_ratio": 0.5,
+  "base_shots": 32,
+  "depth": 1,
+  "seed": 42,
+  "rows": [
+    {
+      "n_assets": 16,
+      "budget": 8,
+      "depth": 1,
+      "base_shots": 32,
+      "state_space_size": 65536,
+      "feasible_space_size": 12870,
+      "status": "completed",
+      "runtime_seconds": 1.541430950164795,
+      "valid_ratio": 0.125,
+      "measurement_success_probability": 0.0,
+      "best_energy": -0.590900493665905,
+      "exact_energy": -0.6612525247408628,
+      "total_shots": 64,
+      "final_readout_shots": 32,
+      "objective_calls": 1,
+      "sampler_calls": 1,
+      "transpilation_metadata": {
+        "backend_name": "proxy",
+        "isa_simulated": false,
+        "objective_calls": 1,
+        "sampler_calls": 1,
+        "shot_governor": {
+          "enabled": false,
+          "budget_cap": 40,
+          "cumulative_shots": 32,
+          "stop_reason": null,
+          "decisions": [
+            {
+              "evaluation": 1,
+              "used_shots": 32,
+              "cumulative_shots": 32,
+              "best_energy": -0.590900493665905,
+              "valid_ratio": 0.28125,
+              "improvement": 0.0,
+              "action": "continue"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "n_assets": 18,
+      "budget": 9,
+      "depth": 1,
+      "base_shots": 32,
+      "state_space_size": 262144,
+      "feasible_space_size": 48620,
+      "status": "completed",
+      "runtime_seconds": 5.014376163482666,
+      "valid_ratio": 0.1875,
+      "measurement_success_probability": 0.0,
+      "best_energy": -0.6316004462368241,
+      "exact_energy": -0.7278261610005916,
+      "total_shots": 64,
+      "final_readout_shots": 32,
+      "objective_calls": 1,
+      "sampler_calls": 1,
+      "transpilation_metadata": {
+        "backend_name": "proxy",
+        "isa_simulated": false,
+        "objective_calls": 1,
+        "sampler_calls": 1,
+        "shot_governor": {
+          "enabled": false,
+          "budget_cap": 40,
+          "cumulative_shots": 32,
+          "stop_reason": null,
+          "decisions": [
+            {
+              "evaluation": 1,
+              "used_shots": 32,
+              "cumulative_shots": 32,
+              "best_energy": -0.5807480003920742,
+              "valid_ratio": 0.15625,
+              "improvement": 0.0,
+              "action": "continue"
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "growth_factors": [
+    {
+      "from_n_assets": 16,
+      "to_n_assets": 18,
+      "runtime_growth_factor": 3.2530657068658035,
+      "state_space_growth_factor": 4.0
+    }
+  ],
+  "assessment": {
+    "max_completed_n_assets": 18,
+    "applicable_for_tested_scale": true,
+    "mean_runtime_seconds": 3.2779035568237305,
+    "max_runtime_seconds": 5.014376163482666,
+    "mean_valid_ratio": 0.15625,
+    "min_valid_ratio": 0.125,
+    "failure_count": 0,
+    "failed_cells": [],
+    "takeaway": "The current implementation completed every tested cell, but the exact-state-space bookkeeping still scales exponentially in n_assets."
+  }
+}
