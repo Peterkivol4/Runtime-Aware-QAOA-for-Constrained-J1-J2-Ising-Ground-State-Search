@@ -1,14 +1,14 @@
 # Runtime-Aware QAOA for Constrained J1-J2 Ising Ground-State Search
 
+**Short description:** Reproducible benchmark for constrained J1-J2 Ising QAOA under realistic routing, mitigation, session, and hardware-cost constraints.
+
+![Runtime-aware QAOA performance profile](results/paper_full/submission_full_performance_profile.png)
+
+**Headline result.** In the `paper_full` benchmark, valid-ratio collapse below `0.5` appears in `100.0%` of aggregated QAOA windows even though `bo_fourier` remains the matched-call sample-efficiency leader and the deployment recommendation still stays classical (`results/paper_full/submission_full_findings.json`, `results/paper_full/submission_full_executive_summary.md`).
+
 This repository benchmarks **runtime-aware QAOA** on the constrained random-bond **J1-J2 Ising model** on square-lattice geometries under realistic NISQ execution constraints: limited shots, routing overhead, mitigation costs, session management, and backend variability.
 
 The active package surface is `spinmesh_runtime`; historical import shims remain only for backward compatibility.
-
-## Snapshot
-
-**Headline result:** In the `paper_full` benchmark, the deployment recommendation remained `run_classical` with `exact_feasible` (expected approximation ratio `1.0`, expected valid ratio `1.0`), while matched-call sample efficiency still favored `bo_fourier` and valid-ratio collapse appeared in `100%` of aggregated QAOA windows.
-
-![Runtime-aware QAOA performance profile](results/paper_full/submission_full_performance_profile.png)
 
 ## Research question
 
