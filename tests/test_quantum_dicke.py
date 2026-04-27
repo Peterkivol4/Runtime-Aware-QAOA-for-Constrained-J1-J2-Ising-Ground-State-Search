@@ -4,7 +4,7 @@ import numpy as np
 from qiskit import QuantumCircuit
 from qiskit.quantum_info import Statevector
 
-from hybrid_qaoa_portfolio.config import RunDeck
+from spinmesh_runtime.config import RunDeck
 from ionmesh_runtime._internal.quantum import _build_parametric_qaoa_circuit, _prepare_dicke_state
 
 

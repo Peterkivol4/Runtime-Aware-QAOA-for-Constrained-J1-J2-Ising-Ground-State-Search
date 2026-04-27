@@ -93,9 +93,9 @@ The fine sweep shows lower valid ratio at `J2/J1 = 0.5` than at the endpoints, b
 
 ## Artifacts
 
-- records CSV: `/Users/hirrreshsundrq/Documents/New project/runtime_aware_qaoa_portfolio_repo_full_rebuilt_v28/results/frustration_axis/frustration_axis_valid_ratio_records.csv`
-- aggregates CSV: `/Users/hirrreshsundrq/Documents/New project/runtime_aware_qaoa_portfolio_repo_full_rebuilt_v28/results/frustration_axis/frustration_axis_valid_ratio_aggregates.csv`
-- plot: `/Users/hirrreshsundrq/Documents/New project/runtime_aware_qaoa_portfolio_repo_full_rebuilt_v28/results/frustration_axis/valid_ratio_vs_j2_ratio.png`
+- records CSV: `results/frustration_axis/frustration_axis_valid_ratio_records.csv`
+- aggregates CSV: `results/frustration_axis/frustration_axis_valid_ratio_aggregates.csv`
+- plot: `results/frustration_axis/valid_ratio_vs_j2_ratio.png`
 
 ## Scientific caution
 

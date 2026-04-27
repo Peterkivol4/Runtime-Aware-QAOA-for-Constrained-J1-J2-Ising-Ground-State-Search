@@ -321,10 +321,6 @@ class IsingSpinProblem:
         return bitstring, self.evaluate_energy(bitstring)
 
 
-PortfolioProblem = IsingSpinProblem
-
-
 __all__ = [
     "IsingSpinProblem",
-    "PortfolioProblem",
 ]

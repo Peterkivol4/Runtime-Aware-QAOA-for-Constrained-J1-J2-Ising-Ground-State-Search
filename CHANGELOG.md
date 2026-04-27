@@ -2,6 +2,7 @@
 
 ## 0.8.0
 
-- Published the runtime-aware constrained J1-J2 QAOA benchmark with decision summaries, mitigation accounting, and committed paper artifacts.
-- Added top-level artifact and headline-result pinning so the main `paper_full` performance profile is visible immediately on GitHub.
-- Kept the `paper_full` artifact suite as the primary release reference for the mature benchmark build.
+- Reframed the repo around SpinMesh Runtime and execution-body deformation in constrained J1-J2 Ising QAOA.
+- Added `ExecutionDeformationVector`, `RuntimeTrustGate`, execution-body reports, and fine `J2/J1` valid-sector sweeps.
+- Made `results/execution_body/`, `results/frustration_axis/`, and `results/frustration_axis_aer/` the primary evidence bundles.
+- Removed stale benchmark-output framing from the public README so the repo no longer presents as a generic benchmark dump.

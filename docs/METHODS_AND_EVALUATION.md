@@ -4,7 +4,7 @@
 
 The core question is:
 
-> Under realistic NISQ execution constraints, when does runtime-aware QAOA improve constrained J1-J2 Ising ground-state approximation quality relative to strong classical baselines?
+> For a fixed frustrated-spin QAOA problem, when do execution-body conditions change the measured physical conclusion or make the quantum result less trustworthy than a classical fixed-sector baseline?
 
 ## Problem setting
 
@@ -26,22 +26,24 @@ The study compares:
 - quantum variants: BO-tuned Fourier QAOA, SPSA-tuned Fourier QAOA, random-search Fourier QAOA, and BO-tuned direct-angle QAOA
 - mitigation bundles: none, readout only, and readout plus ZNE
 
-## Runtime-aware factors
+## Execution-body factors
 
 The implementation keeps execution realism explicit:
 
+- routing, topology, initial layout, and transpiler optimization level
+- calibration age and backend noise snapshots
 - shot budgets and dynamic-shot behavior
+- session policy and queue delay
 - mitigation overhead
 - estimator-versus-sampler separation
 - checkpoint and resume behavior
-- backend/session controls
 - utility scoring that folds quality, runtime cost, and total shots into an execution recommendation
 
 ## Primary benchmark questions
 
-1. Does BO-tuned Fourier QAOA beat SPSA-tuned QAOA in sample efficiency for frustrated ground-state search?
-2. Does readout mitigation plus ZNE materially improve quality near the maximally frustrated region around `J2/J1 = 0.5`?
-3. How does valid-sector ratio collapse as system size, depth, and frustration increase?
+1. Does routing deformation change measured observables when the source QAOA circuit is fixed?
+2. Does calibration, finite shots, session policy, or mitigation restore or further deform physical trust?
+3. Does valid-sector ratio collapse intrinsically across `J2/J1`, or mainly after routed/noisy execution?
 
 ## Primary metrics
 
@@ -52,20 +54,18 @@ The implementation keeps execution realism explicit:
 - runtime seconds
 - total shots
 - objective calls and runtime per call
-- performance profiles
-- cost-normalized utility frontier
+- routing inflation and two-qubit gate count
+- confidence interval width
+- mitigation shift and mitigation instability
+- trust-gate decision and rejection reason
 
 ## Artifact mapping
 
-- `*_summary.csv`: per-trial record table
-- `*_aggregates.csv`: grouped statistics used for tables
-- `*_findings.md`: machine-generated narrative summary
-- `*_executive_summary.md`: high-level synthesis
-- `*_utility_frontier.csv`: cost-normalized ranking of execution candidates
-- `*_decision_report.json`: structured recommendation payload
-- `*_energy_gap_vs_j2_ratio.png`: hardness landscape over `J2/J1`
-- `*_valid_ratio_vs_depth.png` and `*_valid_sector_ratio_vs_spins.png`: sector-failure behavior
-- `*_success_vs_noise.png`: backend/noise sensitivity
+- `results/execution_body/execution_deformation_records.csv`: execution-body record table
+- `results/execution_body/runtime_decision_boundary.md`: trust-gate decisions
+- `results/execution_body/routing_deformation_report.md`: fixed-circuit routing analysis
+- `results/frustration_axis/frustration_axis_valid_ratio_aggregates.csv`: clean `J2/J1` valid-sector control
+- `results/frustration_axis_aer/frustration_axis_aer_aggregates.csv`: routed Aer valid-sector control
 
 ## Threats to validity
 

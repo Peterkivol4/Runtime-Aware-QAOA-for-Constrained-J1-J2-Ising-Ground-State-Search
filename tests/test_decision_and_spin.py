@@ -1,28 +1,19 @@
 from __future__ import annotations
 
-from pathlib import Path
-
 import pandas as pd
 
-from hybrid_qaoa_portfolio.config import RunDeck
-from hybrid_qaoa_portfolio.decision import build_decision_report, compute_utility_frontier
-from hybrid_qaoa_portfolio.governor import ShotBudgetGovernor
-from hybrid_qaoa_portfolio.market_data import build_template_market_csv, load_market_prices, sample_market_window
-from hybrid_qaoa_portfolio.pipeline import run_single_benchmark
+from spinmesh_runtime.config import RunDeck
+from spinmesh_runtime.decision import build_decision_report, compute_utility_frontier
+from spinmesh_runtime.governor import ShotBudgetGovernor
+from spinmesh_runtime.pipeline import run_single_benchmark
 
 
-def test_market_window_loader_and_single_benchmark_payload(tmp_path: Path) -> None:
-    csv_path = build_template_market_csv(tmp_path / "market.csv", periods=90)
-    prices = load_market_prices(csv_path)
-    window = sample_market_window(prices, n_assets=4, window=30, seed=7)
-    assert len(window.tickers) == 4
-    assert window.covariance.shape == (4, 4)
-
+def test_spin_problem_single_benchmark_payload() -> None:
     cfg = RunDeck(
         lattice_type="j1j2_frustrated",
         j2_coupling=0.5,
-        n_assets=4,
-        budget=2,
+        n_spins=4,
+        magnetization_m=0,
         depth=1,
         fourier_modes=1,
         bo_iters=2,
@@ -42,8 +33,8 @@ def test_market_window_loader_and_single_benchmark_payload(tmp_path: Path) -> No
 
 def test_decision_report_and_governor_metadata(tmp_path: Path) -> None:
     cfg = RunDeck(
-        n_assets=4,
-        budget=2,
+        n_spins=4,
+        magnetization_m=0,
         depth=1,
         fourier_modes=1,
         bo_iters=2,

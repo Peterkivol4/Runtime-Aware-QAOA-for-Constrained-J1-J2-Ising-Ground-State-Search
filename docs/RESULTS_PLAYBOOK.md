@@ -4,66 +4,53 @@ This repository is meant to produce a defensible evidence bundle for **constrain
 
 ## Quick Start
 
-Generate a small local-proxy pilot study:
+Generate the compact execution-body study:
 
 ```bash
-python tools/run_pilot_study.py
+PYTHONPATH=src python tools/run_execution_body_experiments.py --output-dir results/execution_body
 ```
 
-Inspect the resolved configuration without launching the study:
+Generate the clean frustration-axis valid-sector sweep:
 
 ```bash
-python tools/run_pilot_study.py --dry-run
+PYTHONPATH=src python tools/run_frustration_axis_sweep.py --output-dir results/frustration_axis
 ```
 
-Generate a small Aer-backed pilot study:
+Generate the routed Aer control:
 
 ```bash
-python tools/run_pilot_study.py --runtime-mode aer --label aer_pilot --output-dir results/aer_pilot
-```
-
-Generate a larger submission-oriented bundle:
-
-```bash
-python tools/run_paper_study.py --profile draft
+PYTHONPATH=src python tools/run_frustration_axis_aer_sweep.py --output-dir results/frustration_axis_aer
 ```
 
 ## What A Good Bundle Should Answer
 
 The active study layer should visibly answer three questions:
 
-1. Does BO-tuned Fourier QAOA beat SPSA-tuned QAOA in sample efficiency?
-2. Does mitigation materially improve ground-state quality near `J2/J1 = 0.5`?
-3. How does valid-sector ratio degrade with system size, depth, and frustration?
+1. Does routing/topology/layout change measured physical observables when the source circuit is fixed?
+2. Does finite-shot, calibration, session, or mitigation policy restore or further deform physical trust?
+3. Does valid-sector ratio degrade intrinsically across `J2/J1`, or does collapse appear mainly after routed/noisy execution?
 
 ## Minimum Artifact Set
 
-A benchmark bundle should contain:
+A current evidence bundle should contain:
 
-- timestamped ledger artifacts: `*_results.json`, `*_summary.csv`, `*.sqlite`
-- aggregate tables: `*_aggregates.csv`, `*_performance_profile.csv`, `*_utility_frontier.csv`
-- findings and decision artifacts: `*_findings.{json,md,tex}`, `*_decision_report.{json,md}`, `*_executive_summary.md`
-- figures:
-  - `*_approx_gap.png`
-  - `*_sample_efficiency.png`
-  - `*_success_vs_noise.png`
-  - `*_valid_ratio_vs_depth.png`
-  - `*_valid_sector_ratio_vs_spins.png`
-  - `*_energy_gap_vs_j2_ratio.png`
-  - `*_mitigation_vs_shots.png`
-  - `*_performance_profile.png`
+- execution-body records: `results/execution_body/execution_deformation_records.csv`
+- trust report: `results/execution_body/runtime_decision_boundary.md`
+- routing report and plot: `results/execution_body/routing_deformation_report.md`, `routing_deformation_curve.png`
+- frustration-axis records: `results/frustration_axis/frustration_axis_valid_ratio_records.csv`
+- routed Aer control: `results/frustration_axis_aer/frustration_axis_aer_records.csv`
+- figure artifacts for routing deformation, shot-body stability, mitigation deformation, and valid-sector ratio vs `J2/J1`
 
 ## Recommended Study Progression
 
-1. Run the local-proxy pilot and check that the artifact schema is clean.
-2. Run the same compact grid on Aer and compare whether the sign of the conclusion changes.
-3. Expand the `J2/J1` sweep to include `0.0, 0.25, 0.5, 0.75, 1.0`.
+1. Run the execution-body sweep and inspect whether routing inflation changes observable error.
+2. Run the clean `J2/J1` sweep and check whether valid-sector loss is intrinsic to the frustration axis.
+3. Run the routed Aer control and compare whether collapse appears only after execution-body deformation.
 4. Use at least three seeds for any claim about reproducibility or flatness.
-5. Add a broader shot tier such as `256` or `512` if you want the mitigation cost curve to be visible.
-6. Treat live-hardware runs as appendices unless the hardware grid is large enough to stand on its own.
+5. Treat live-hardware runs as appendices unless the hardware grid is large enough to stand on its own.
 
 ## What Not To Claim
 
 - Do not claim quantum advantage from a single backend or a single seed.
 - Do not claim scaling from exact-reference studies without naming the exact-system-size boundary.
-- Do not claim mitigation helps unless the gain survives the extra shot cost and appears in more than one window.
+- Do not claim mitigation helps unless it improves physical observables, not only the energy number.

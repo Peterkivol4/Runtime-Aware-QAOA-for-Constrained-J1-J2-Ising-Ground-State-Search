@@ -39,8 +39,6 @@ def _with_physics_labels(frame: pd.DataFrame) -> pd.DataFrame:
     labeled = frame.copy()
     if "regime" in labeled.columns and "lattice_type" not in labeled.columns:
         labeled["lattice_type"] = labeled["regime"]
-    if "n_assets" in labeled.columns and "n_spins" not in labeled.columns:
-        labeled["n_spins"] = labeled["n_assets"]
     if "valid_ratio" in labeled.columns and "valid_sector_ratio" not in labeled.columns:
         labeled["valid_sector_ratio"] = labeled["valid_ratio"]
     return labeled
@@ -48,7 +46,7 @@ def _with_physics_labels(frame: pd.DataFrame) -> pd.DataFrame:
 
 def _problem_label(row: pd.Series) -> str:
     lattice_type = row.get("lattice_type", row.get("regime"))
-    n_spins = row.get("n_spins", row.get("n_assets"))
+    n_spins = row.get("n_spins")
     return (
         f"{row['seed']}|{lattice_type}|{n_spins}|{row['budget']}|{row['depth']}|"
         f"{row['noise_level']}|{row['shot_budget']}|{row.get('j2_ratio', 'na')}|{row.get('disorder_strength', 'na')}"
@@ -217,7 +215,7 @@ def _record_from_trace(
         family="qaoa",
         regime=problem.regime,
         seed=cfg.seed,
-        n_assets=problem.n,
+        n_spins=problem.n,
         budget=problem.budget,
         depth=cfg.depth,
         noise_level=cfg.noise_level,
@@ -644,7 +642,7 @@ def run_smoke_test(cfg: RunDeck | None = None) -> dict[str, Any]:
         "method": record.method,
         "seed": record.seed,
         "lattice_type": record.regime,
-        "n_spins": record.n_assets,
+        "n_spins": record.n_spins,
         "magnetization_m": cfg.magnetization_m,
         "j2_ratio": record.j2_ratio,
         "disorder_strength": record.disorder_strength,
@@ -693,9 +691,9 @@ def run_single_benchmark(cfg: RunDeck | None = None) -> dict[str, Any]:
 def _budget_for_system_size(cfg: RunDeck, n_spins: int) -> int:
     if cfg.study_budget_ratio is not None:
         return max(1, min(n_spins, int(round(n_spins * cfg.study_budget_ratio))))
-    if n_spins == cfg.n_assets:
+    if n_spins == cfg.n_spins:
         return cfg.budget
-    scaled = cfg.budget / max(1, cfg.n_assets)
+    scaled = cfg.budget / max(1, cfg.n_spins)
     return max(1, min(n_spins, int(round(n_spins * scaled))))
 
 
@@ -703,7 +701,7 @@ def _trial_grid(cfg: RunDeck) -> list[RunDeck]:
     grid: list[RunDeck] = []
     for j2_ratio in cfg.study_j2_ratios:
         for disorder_level in cfg.study_disorder_levels:
-            for n_spins in cfg.study_n_assets:
+            for n_spins in cfg.study_n_spins:
                 budget = _budget_for_system_size(cfg, n_spins)
                 magnetization_m = 2 * budget - n_spins
                 for seed in range(cfg.seed, cfg.seed + cfg.study_num_seeds):
@@ -737,8 +735,7 @@ def _build_trace_df(records: list[TrialResult]) -> pd.DataFrame:
             row["seed"] = record.seed
             row["regime"] = record.regime
             row["lattice_type"] = record.regime
-            row["n_assets"] = record.n_assets
-            row["n_spins"] = record.n_assets
+            row["n_spins"] = record.n_spins
             row["budget"] = record.budget
             row["depth"] = record.depth
             row["noise_level"] = record.noise_level
@@ -833,7 +830,7 @@ def _best_window(frame: pd.DataFrame, value_col: str, *, ascending: bool = False
     payload = {
         "method": row.get("method"),
         "lattice_type": row.get("lattice_type", row.get("regime")),
-        "n_spins": int(row.get("n_spins", row.get("n_assets"))) if row.get("n_spins", row.get("n_assets")) is not None else None,
+        "n_spins": int(row.get("n_spins")) if row.get("n_spins") is not None else None,
         "budget": int(row.get("budget")) if row.get("budget") is not None else None,
         "depth": int(row.get("depth")) if row.get("depth") is not None else None,
         "noise_level": float(row.get("noise_level")) if row.get("noise_level") is not None else None,

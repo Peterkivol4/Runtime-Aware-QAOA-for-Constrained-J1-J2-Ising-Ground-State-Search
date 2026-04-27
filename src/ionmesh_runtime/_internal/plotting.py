@@ -75,13 +75,12 @@ def plot_valid_ratio_vs_depth(summary_df, output_path: Path) -> None:
 def plot_valid_sector_ratio_vs_spins(summary_df, output_path: Path) -> None:
     plt = load_matplotlib_pyplot()
     load_pandas()
-    spin_col = "n_spins" if "n_spins" in summary_df.columns else "n_assets" if "n_assets" in summary_df.columns else None
-    if spin_col is None:
+    if "n_spins" not in summary_df.columns:
         return
     fig, ax = plt.subplots(figsize=(9, 5))
-    grouped = summary_df.groupby(["method", spin_col]).valid_ratio.mean().reset_index()
+    grouped = summary_df.groupby(["method", "n_spins"]).valid_ratio.mean().reset_index()
     for method, chunk in grouped.groupby("method"):
-        ax.plot(chunk[spin_col], chunk["valid_ratio"], marker="o", linewidth=1.5, label=method)
+        ax.plot(chunk["n_spins"], chunk["valid_ratio"], marker="o", linewidth=1.5, label=method)
     ax.set_title("Valid-sector ratio vs system size")
     ax.set_xlabel("Number of spins")
     ax.set_ylabel("Mean valid-sector ratio")

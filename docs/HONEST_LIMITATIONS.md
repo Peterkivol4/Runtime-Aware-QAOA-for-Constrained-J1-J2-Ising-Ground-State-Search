@@ -1,6 +1,6 @@
 # Honest Limitations
 
-This repository is a **runtime-aware frustrated-spin benchmarking stack**, not a claim that shallow QAOA already solves hard J1-J2 instances better than classical methods.
+This repository is an **execution-body deformation stack for frustrated-spin QAOA**, not a claim that shallow QAOA already solves hard J1-J2 instances better than classical methods.
 
 ## Current Limits
 
@@ -12,10 +12,10 @@ This repository is a **runtime-aware frustrated-spin benchmarking stack**, not a
 
 ## What The Repo Is Good For
 
-- testing whether runtime-aware QAOA remains competitive under explicit shot and session costs
+- testing whether execution-body conditions preserve enough physical trust to accept a QAOA result
 - comparing BO, SPSA, and random-search tuning under matched primitive-call budgets
-- exposing valid-sector collapse as size, depth, and frustration grow
-- producing reproducible artifact bundles across `local_proxy`, `aer`, and live-runtime appendices
+- exposing valid-sector collapse after routing, noise, finite shots, and mitigation
+- producing reproducible artifact bundles for execution-body and frustration-axis controls
 
 ## What Still Requires Care
 

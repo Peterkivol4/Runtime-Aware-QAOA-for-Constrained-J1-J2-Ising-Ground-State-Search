@@ -1,5 +1,5 @@
-from hybrid_qaoa_portfolio.config import RunDeck
-from hybrid_qaoa_portfolio.pipeline import run_single_benchmark, run_smoke_test
+from spinmesh_runtime.config import RunDeck
+from spinmesh_runtime.pipeline import run_single_benchmark, run_smoke_test
 
 
 def test_smoke_test_runs_without_quantum_stack() -> None:
@@ -12,8 +12,8 @@ def test_smoke_test_runs_without_quantum_stack() -> None:
 
 def test_single_benchmark_returns_records() -> None:
     cfg = RunDeck(
-        n_assets=5,
-        budget=2,
+        n_spins=5,
+        magnetization_m=-1,
         depth=2,
         fourier_modes=1,
         bo_iters=4,

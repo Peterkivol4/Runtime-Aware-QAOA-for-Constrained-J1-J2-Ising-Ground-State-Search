@@ -1,9 +1,9 @@
 import sqlite3
 from pathlib import Path
 
-from hybrid_qaoa_portfolio.config import RunDeck
-from hybrid_qaoa_portfolio.runtime_support import RuntimeExecutionPlan
-from hybrid_qaoa_portfolio.tracking import RunLedger, SCHEMA_VERSION
+from spinmesh_runtime.config import RunDeck
+from spinmesh_runtime.runtime_support import RuntimeExecutionPlan
+from spinmesh_runtime.tracking import RunLedger, SCHEMA_VERSION
 
 
 def test_sqlite_schema_version_is_initialized(tmp_path: Path) -> None:
@@ -15,7 +15,7 @@ def test_sqlite_schema_version_is_initialized(tmp_path: Path) -> None:
 
 def test_optimizer_checkpoint_roundtrip(tmp_path: Path) -> None:
     sqlite_path = RunLedger.initialize_sqlite(tmp_path / "ckpt.sqlite")
-    cfg = RunDeck(seed=7, n_assets=4, budget=2, depth=1, fourier_modes=1)
+    cfg = RunDeck(seed=7, n_spins=4, magnetization_m=0, depth=1, fourier_modes=1)
     run_key = RunLedger.make_run_key(cfg, "bo_fourier")
     payload = {"evaluation": 3, "best_energy": -1.23, "trace": [{"evaluation": 1}]}
     RunLedger.save_optimizer_checkpoint(sqlite_path, run_key, "bo_fourier", payload)

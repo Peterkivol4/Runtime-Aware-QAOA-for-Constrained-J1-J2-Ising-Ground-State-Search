@@ -4,17 +4,17 @@ This file is now a **physics-first working draft placeholder** for the constrain
 
 ## Core Claim To Defend
 
-Under realistic shot, mitigation, and backend constraints, runtime-aware QAOA can be benchmarked honestly on the fixed-magnetization J1-J2 Ising model, with explicit comparison against strong classical baselines and explicit visibility into valid-sector collapse.
+Under realistic routing, calibration, shot, mitigation, and backend constraints, QAOA can be benchmarked honestly on the fixed-magnetization J1-J2 Ising model, with explicit visibility into when the execution body deforms physical observables enough to reject the quantum result.
 
 ## Mandatory Elements Before Submission
 
 - direct tests of the Ising-to-QUBO mapping and magnetization-to-cardinality mapping
 - a documented Dicke-state initialization in the main QAOA path
 - benchmark figures for:
-  - approximation gap vs `J2/J1`
-  - valid-sector ratio vs system size and depth
-  - BO vs SPSA sample efficiency
-  - mitigation delta near `J2/J1 = 0.5`
+  - routing deformation vs observable error
+  - valid-sector ratio vs `J2/J1`
+  - routed Aer collapse vs clean local-proxy sector preservation
+  - mitigation shift vs observable instability
 - a related-work section that covers QAOA, constrained variational optimization, frustrated spin systems, and mitigation/runtime literature
 
 ## Status Note

@@ -1,7 +1,7 @@
 import pytest
 
-from hybrid_qaoa_portfolio.config import RunDeck
-from hybrid_qaoa_portfolio.runtime_support import RuntimeSamplerFactory, RuntimeSessionManager
+from spinmesh_runtime.config import RunDeck
+from spinmesh_runtime.runtime_support import RuntimeSamplerFactory, RuntimeSessionManager
 
 
 @pytest.mark.skipif(RuntimeSamplerFactory.__dict__.get('build_generic_heavy_hex_backend') is None, reason='runtime support unavailable')

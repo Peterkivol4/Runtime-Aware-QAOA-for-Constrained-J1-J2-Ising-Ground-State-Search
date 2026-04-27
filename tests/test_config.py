@@ -1,4 +1,4 @@
-from hybrid_qaoa_portfolio.config import RunDeck
+from spinmesh_runtime.config import RunDeck
 
 
 def test_dynamic_shots_scales_with_cvar_alpha() -> None:
@@ -7,7 +7,7 @@ def test_dynamic_shots_scales_with_cvar_alpha() -> None:
 
 
 def test_validate_rejects_invalid_budget() -> None:
-    cfg = RunDeck(n_assets=3, budget=4)
+    cfg = RunDeck(n_spins=3, magnetization_m=5)
     try:
         cfg.validate()
     except ValueError as exc:

@@ -39,17 +39,8 @@ class InternalSpinRuntime(RuntimeGateway):
         return InternalServiceReply(status="ok", payload=payload)
 
 
-InternalPortfolioRuntime = InternalSpinRuntime
-PortfolioServiceRequest = InternalServiceEnvelope
-PortfolioServiceResponse = InternalServiceReply
-RuntimeAwarePortfolioService = InternalSpinRuntime
-
 __all__ = [
     'InternalServiceEnvelope',
     'InternalServiceReply',
     'InternalSpinRuntime',
-    'InternalPortfolioRuntime',
-    'PortfolioServiceRequest',
-    'PortfolioServiceResponse',
-    'RuntimeAwarePortfolioService',
 ]

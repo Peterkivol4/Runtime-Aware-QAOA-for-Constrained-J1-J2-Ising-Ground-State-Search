@@ -1,29 +1,30 @@
 # Why Classical Still Wins on One Concrete J1-J2 Workload
 
-This note exists for one reason: the most useful outcome of a runtime-aware benchmark is often a decision not to spend more quantum budget.
+This note exists for one reason: the most useful outcome of an execution-body benchmark is often a decision not to spend more quantum budget.
 
 ## Workload
 
-The case below comes from the saved Aer pivot sweep in `results/pivot_validation/compact_j2_sweep_aer_aggregates.csv`.
+The case below comes from the current execution-body and routed Aer controls in `results/execution_body/` and `results/frustration_axis_aer/`.
 
 - lattice: `j1j2_frustrated`
 - size: `n_spins = 6`
 - magnetization sector: half-filling (`M = 0`, so `k = 3`)
 - frustration ratio: `J2/J1 = 0.5`
 - disorder strength: `0.0`
-- noise level: `0.04`
+- execution body: routed Aer-style backend with `forked_heavy_hex` topology and `sabre` routing
 
 This is a clean, small, maximally frustrated test case. It is exactly the sort of workload where a shallow, symmetry-matched QAOA pass is tempting.
 
 ## Budget and setup
 
-The concrete comparison that mattered most was the lowest-budget QAOA slice that still looked operationally plausible:
+The concrete comparison that mattered most was the compact routed execution body that still looked operationally plausible:
 
-- backend path: `aer`
-- QAOA depth: `p = 1`
-- shot budget: `64`
-- optimizer: `bo_direct`
-- mitigation: `none`, then `readout`
+- backend path: routed `AerSimulator`
+- QAOA depth: `p = 2`
+- shot budget: `2048`
+- topology: `forked_heavy_hex`
+- routing method: `sabre`
+- transpiler optimization level: `1`
 
 The baseline reference on the same workload was `exact_feasible`.
 
@@ -35,56 +36,44 @@ The bar was therefore not "prove quantum advantage." The bar was "preserve enoug
 
 ## What failed
 
-The energy metric alone looked deceptively fine. For the `bo_direct` run above, the saved aggregate row reports:
+The clean local-proxy path did not intrinsically collapse at the frustration point: the fine sweep reports a mean valid-sector ratio of `0.8783` at `J2/J1 = 0.5`. The routed Aer control tells a different story. At the same nominal frustration point, the routed execution body reports:
 
-- `mean_ratio = 1.0`
-- `mean_valid_ratio = 0.3307291666666667`
-- `p_succ = 0.033854166666666664`
-- `mean_total_shots = 960`
-- `mean_objective_calls = 3`
-- `mean_runtime_seconds = 0.5220749378204346`
+- `mean_valid_ratio = 0.3166`
+- `collapse_fraction = 1.0`
+- `mean_correlation_error = 0.4006`
+- `mean_routing_inflation = 33.5926`
+- `mean_two_qubit_gate_count = 196`
 
-In other words, the run could still recover exact-feasible energy on the shots that landed in the right sector, but only about one third of measured mass stayed in the valid magnetization sector and the feasible-success probability was about `3.39%`.
+In other words, the source-level circuit and the physics problem were not enough to preserve sector trust after routing and noisy execution. Only about one third of measured mass stayed in the valid magnetization sector.
 
-Readout mitigation did not rescue this case:
+The broader execution-body sweep found the same failure mode under a fixed source circuit:
 
-- `mean_valid_ratio` moved only from `0.3307291666666667` to `0.33111343443016406`
-- `p_succ` moved slightly in the wrong direction, from `0.033854166666666664` to `0.03299271528018215`
+- `90 / 90` quantum records were rejected by the compact trust gate
+- transpiled depth ranged from `378` to `1568`
+- two-qubit gate count ranged from `96` to `400`
+- two-qubit gate count correlated with correlation error at approximately `r = 0.60`
 
-Changing the optimizer did not fix the problem either. On the same workload slice:
-
-- `bo_fourier` also stayed at `mean_valid_ratio = 0.3307291666666667`
-- `spsa_fourier` used `2496` shots and `9` objective calls but only reached `mean_valid_ratio = 0.33072916666666663`
-
-Even the best QAOA variant in this exact workload family under the same noise level, `random_fourier` with `readout+zne`, only reached:
-
-- `mean_valid_ratio = 0.4103221615839281`
-- `p_succ = 0.030997271803104954`
-- `mean_total_shots = 1376`
-
-That is still not enough to justify a quantum-first recommendation.
+Mitigation also did not rescue the compact case. The mitigation report flags a false-correction case where ZNE improved energy error while worsening correlation error.
 
 ## Why the classical recommendation survived
 
-The same saved aggregate file reports, for `exact_feasible` on the identical workload:
+The same compact workload has an exact fixed-sector classical reference:
 
-- `mean_ratio = 1.0`
-- `p_succ = 1.0`
-- `mean_valid_ratio = 1.0`
-- `mean_total_shots = 0`
-- `mean_objective_calls = 0`
-- `mean_runtime_seconds = 0.0`
+- exact feasible energy: `-5.00000000`
+- exact feasible bitstring: `101010`
+- valid-sector ratio: `1.0`
+- shots: `0`
 
-This is the concrete reason the decision layer remains useful. If we looked only at approximation ratio, the shallow QAOA runs would appear much better than they really are. The framework prevents that mistake by charging QAOA for the thing that matters operationally: how much valid, decision-usable probability mass survives after routing, noise, and finite-shot execution.
+This is the concrete reason the decision layer remains useful. If we looked only at energy, the shallow QAOA run would appear more usable than it really is. The framework prevents that mistake by charging QAOA for the thing that matters operationally: how much valid, decision-usable probability mass survives after routing, noise, and finite-shot execution.
 
-For this workload, the classical recommendation survived because QAOA bought no decision-quality gain. It bought extra shots, extra calls, and extra runtime while still leaving most of the sample mass outside the sector we actually care about.
+For this workload, the classical recommendation survived because QAOA bought no decision-quality gain. It bought routed two-qubit depth, finite-shot uncertainty, and mitigation ambiguity while still leaving most of the sample mass outside the sector we actually care about.
 
 ## What I would test next
 
 Two follow-ups are worth doing before drawing a broader conclusion.
 
-First, I would test whether the clean maximally frustrated slice is specifically the problem, or whether the issue is the current shallow execution contract. In the same Aer pivot study, some `J2/J1 = 0.5` cases with `disorder_strength = 0.3` retain much higher valid ratios, so the next question is whether disorder is genuinely making the sector easier to preserve or merely changing where the post-selection burden shows up.
+First, I would test whether this conclusion survives a larger routed grid over `n_spins = 8`, `J2/J1 = 0.0, 0.1, ..., 1.0`, shots `256, 512, 1024`, and depth `p = 1, 2, 3`.
 
-Second, I would test a stricter sector-preservation strategy rather than spending more optimizer budget on the current setup. The current data show that extra optimization steps and light mitigation do not repair the main failure mode. A better next experiment is therefore a more explicitly sector-preserving ansatz or mixer, plus a utility rule that treats valid-sector reliability as a hard gate rather than a secondary metric.
+Second, I would test a stricter sector-preservation strategy rather than spending more optimizer budget on the current setup. The current data show that execution-body deformation can dominate the source-level physics. A better next experiment is therefore a more explicitly sector-preserving ansatz or mixer, plus a utility rule that treats valid-sector reliability as a hard gate rather than a secondary metric.
 
 That is the point of this repo at its best: it gives a defensible reason to stop paying for a quantum workflow when the evidence does not support it.

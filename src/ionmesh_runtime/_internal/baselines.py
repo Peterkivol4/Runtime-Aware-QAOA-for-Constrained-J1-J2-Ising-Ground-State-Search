@@ -21,9 +21,6 @@ class SpinCandidate:
     energy: float
 
 
-PortfolioCandidate = SpinCandidate
-
-
 class ClassicalBaselines:
     def __init__(self, problem: IsingSpinProblem, cfg: RunDeck):
         self.problem = problem
@@ -161,7 +158,7 @@ class ClassicalBaselines:
                     family="classical_baseline",
                     regime=self.problem.regime,
                     seed=self.cfg.seed,
-                    n_assets=self.problem.n,
+                    n_spins=self.problem.n,
                     budget=self.problem.budget,
                     depth=self.cfg.depth,
                     noise_level=self.cfg.noise_level,
@@ -195,6 +192,5 @@ class ClassicalBaselines:
 
 __all__ = [
     "SpinCandidate",
-    "PortfolioCandidate",
     "ClassicalBaselines",
 ]

@@ -1,13 +1,21 @@
 # Results
 
-This directory is the home for generated benchmark artifacts.
+This directory contains the evidence bundles that support the current SpinMesh Runtime framing.
 
-For a reproducible local-proxy pilot run, use:
+- `execution_body/` records execution-body deformation for a fixed QAOA source circuit.
+- `frustration_axis/` records the clean local-proxy valid-sector sweep over `J2/J1 = 0.0, 0.1, ..., 1.0`.
+- `frustration_axis_aer/` records the routed Aer control for the same frustration-axis question.
+- `live_hardware/` contains hardware appendix material and calibration snapshots.
+
+Regenerate the core execution-body bundle with:
 
 ```bash
-python tools/run_pilot_study.py
+PYTHONPATH=src python tools/run_execution_body_experiments.py --output-dir results/execution_body
 ```
 
-That command writes a small evidence bundle under `results/pilot/` and records the exact resolved configuration in a manifest JSON file.
+Regenerate the frustration-axis controls with:
 
-The pilot run is intentionally lightweight so it can complete on a normal laptop. It is a starting point for producing evidence, not the final thesis-scale benchmark grid.
+```bash
+PYTHONPATH=src python tools/run_frustration_axis_sweep.py --output-dir results/frustration_axis
+PYTHONPATH=src python tools/run_frustration_axis_aer_sweep.py --output-dir results/frustration_axis_aer
+```

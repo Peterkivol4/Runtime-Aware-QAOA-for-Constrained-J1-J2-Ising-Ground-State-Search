@@ -29,10 +29,6 @@ def physics_label_payload(payload: dict[str, Any]) -> dict[str, Any]:
         labeled["lattice_type"] = labeled.pop("regime")
     else:
         labeled.pop("regime", None)
-    if "n_assets" in labeled and "n_spins" not in labeled:
-        labeled["n_spins"] = labeled.pop("n_assets")
-    else:
-        labeled.pop("n_assets", None)
     if "valid_ratio" in labeled and "valid_sector_ratio" not in labeled:
         labeled["valid_sector_ratio"] = labeled["valid_ratio"]
     return labeled
@@ -378,7 +374,7 @@ class RunLedger(ResultLedger):
                         record.get("family"),
                         record.get("lattice_type", record.get("regime")),
                         record.get("seed"),
-                        record.get("n_spins", record.get("n_assets")),
+                        record.get("n_spins"),
                         record.get("budget"),
                         record.get("depth"),
                         record.get("noise_level"),

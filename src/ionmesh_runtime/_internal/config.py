@@ -16,15 +16,6 @@ SUPPORTED_LATTICE_TYPES = (
     "diluted",
     "random_ferrimagnet",
 )
-LEGACY_LATTICE_TYPE_MAP = {
-    "random": "random_bond",
-    "low_corr": "afm_uniform",
-    "high_corr": "j1j2_frustrated",
-    "sparse": "diluted",
-    "clustered": "j1j2_frustrated",
-    "high_penalty": "random_ferrimagnet",
-    "real_market": "j1j2_frustrated",
-}
 SUPPORTED_REGIMES = SUPPORTED_LATTICE_TYPES
 SUPPORTED_PARAMETERIZATIONS = ("fourier", "direct")
 SUPPORTED_CONSTRAINT_HANDLERS = ("remap", "penalty")
@@ -150,15 +141,9 @@ class RunDeck:
 
     def __init__(self, **kwargs: Any):
         payload = dict(kwargs)
-        legacy_n_assets = payload.pop("n_assets", None)
-        if legacy_n_assets is not None and "n_spins" not in payload:
-            payload["n_spins"] = legacy_n_assets
         legacy_regime = payload.pop("regime", None)
         if legacy_regime is not None and "lattice_type" not in payload:
             payload["lattice_type"] = legacy_regime
-        legacy_study_n_assets = payload.pop("study_n_assets", None)
-        if legacy_study_n_assets is not None and "study_n_spins" not in payload:
-            payload["study_n_spins"] = legacy_study_n_assets
         legacy_study_regimes = payload.pop("study_regimes", None)
         if legacy_study_regimes is not None and "lattice_type" not in payload:
             study_regimes = tuple(legacy_study_regimes)
@@ -167,12 +152,6 @@ class RunDeck:
         legacy_budget = payload.pop("budget", None)
         legacy_budget_ratio = payload.pop("budget_ratio", None)
         payload.pop("risk_aversion", None)
-        payload.pop("market_data_csv", None)
-        payload.pop("market_date_column", None)
-        payload.pop("market_window", None)
-        payload.pop("market_window_index", None)
-        if "lattice_type" in payload:
-            payload["lattice_type"] = LEGACY_LATTICE_TYPE_MAP.get(str(payload["lattice_type"]), payload["lattice_type"])
         field_map = {item.name: item for item in fields(type(self))}
         if legacy_budget is not None and "magnetization_m" not in payload:
             n_spins = int(payload.get("n_spins", field_map["n_spins"].default))
@@ -213,10 +192,6 @@ class RunDeck:
         return cfg
 
     @property
-    def n_assets(self) -> int:
-        return self.n_spins
-
-    @property
     def budget(self) -> int:
         return (self.magnetization_m + self.n_spins) // 2
 
@@ -227,10 +202,6 @@ class RunDeck:
     @property
     def regime(self) -> str:
         return self.lattice_type
-
-    @property
-    def study_n_assets(self) -> tuple[int, ...]:
-        return self.study_n_spins
 
     @property
     def study_regimes(self) -> tuple[str, ...]:
@@ -399,7 +370,7 @@ class TrialResult:
     family: str
     regime: str
     seed: int
-    n_assets: int
+    n_spins: int
     budget: int
     depth: int
     noise_level: float

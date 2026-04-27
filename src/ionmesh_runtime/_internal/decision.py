@@ -64,8 +64,6 @@ def _physics_labeled_frame(summary_df: pd.DataFrame) -> pd.DataFrame:
     frame = summary_df.copy()
     if "regime" in frame.columns and "lattice_type" not in frame.columns:
         frame["lattice_type"] = frame["regime"]
-    if "n_assets" in frame.columns and "n_spins" not in frame.columns:
-        frame["n_spins"] = frame["n_assets"]
     return frame
 
 

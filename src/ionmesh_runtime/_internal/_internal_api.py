@@ -1,12 +1,12 @@
 from .config import RunDeck
 from .pipeline import run_benchmark_study, run_decision, run_single_benchmark, run_smoke_test
-from .service import InternalPortfolioRuntime, InternalServiceEnvelope, InternalServiceReply
+from .service import InternalServiceEnvelope, InternalServiceReply, InternalSpinRuntime
 
 __all__ = [
     'RunDeck',
     'InternalServiceEnvelope',
     'InternalServiceReply',
-    'InternalPortfolioRuntime',
+    'InternalSpinRuntime',
     'run_smoke_test',
     'run_single_benchmark',
     'run_benchmark_study',

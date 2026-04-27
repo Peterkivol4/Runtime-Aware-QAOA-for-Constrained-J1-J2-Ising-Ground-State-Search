@@ -4,28 +4,28 @@ Use this template when turning a benchmark bundle into a short reviewer-facing s
 
 ## Problem
 
-This study benchmarks runtime-aware QAOA on the constrained random-bond J1-J2 Ising model with fixed magnetization. The main stress point is the frustration ratio `J2/J1`, especially near `0.5`.
+This study benchmarks execution-body deformation in QAOA on the constrained random-bond J1-J2 Ising model with fixed magnetization. The main question is whether routing, calibration, finite shots, session policy, and mitigation change the measured physics after the source circuit is fixed.
 
 ## Questions
 
-- Does BO-tuned Fourier QAOA beat SPSA-tuned QAOA in sample efficiency?
-- Does mitigation improve ground-state quality enough to justify its shot overhead?
-- How does valid-sector ratio change with system size, depth, and frustration?
+- Does routing/topology/layout change the measured energy, magnetization, or correlations?
+- Does mitigation improve physical observables, or only the energy number?
+- Does valid-sector ratio collapse intrinsically across `J2/J1`, or mainly after routed/noisy execution?
 
 ## Main Result
 
 State the conclusion plainly:
 
-- whether QAOA beat the classical frontier or not
+- whether the trust gate accepted or rejected the quantum execution
 - whether the main result is positive, flat, or negative
-- whether the `J2/J1 = 0.5` region behaved like a harder regime
+- whether the `J2/J1 = 0.5` region behaved differently from the execution-body collapse baseline
 
 ## Operational Takeaway
 
-- recommended method family
-- expected runtime range
-- expected shot cost
-- whether mitigation is worth enabling on the tested grid
+- accepted, warned, or rejected quantum result
+- dominant rejection reason
+- observed routing/depth/two-qubit burden
+- whether mitigation is worth enabling on the tested execution body
 
 ## One Honest Limitation
 

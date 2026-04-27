@@ -2,9 +2,9 @@ from __future__ import annotations
 
 from pathlib import Path
 
-from hybrid_qaoa_portfolio.calibration_snapshot import compare_snapshot_files
-from hybrid_qaoa_portfolio.config import RunDeck
-from hybrid_qaoa_portfolio.live_certification import save_certification_report, CertificationResult
+from spinmesh_runtime.calibration_snapshot import compare_snapshot_files
+from spinmesh_runtime.config import RunDeck
+from spinmesh_runtime.live_certification import save_certification_report, CertificationResult
 
 
 def test_compare_snapshot_files(tmp_path: Path) -> None:

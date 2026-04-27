@@ -1,6 +1,6 @@
 # Run Provenance
 
-This file records how to describe benchmark timing and scope for the **post-pivot J1-J2 Ising study layer**.
+This file records how to describe timing and scope for the **SpinMesh Runtime execution-body evidence layer**.
 
 ## What To Record For Every Bundle
 
@@ -16,8 +16,8 @@ This file records how to describe benchmark timing and scope for the **post-pivo
   - shot budgets
   - noise levels
   - seeds
-- artifact manifest path
-- total trial count and total recorded outcomes
+- artifact manifest or summary path
+- total record count and total aggregate rows
 
 ## Why This Matters
 
@@ -32,12 +32,11 @@ and get an answer directly from the artifact set.
 
 ## Recommended Labels
 
-- `pilot_local_proxy`
-- `pilot_aer`
-- `compact_j2_sweep_local_proxy`
-- `compact_j2_sweep_aer`
+- `execution_body_fixed_circuit`
+- `frustration_axis_local_proxy`
+- `frustration_axis_routed_aer`
 - `live_appendix_backend`
 
 ## Historical Note
 
-Earlier pre-pivot benchmark bundles remain in `results/` for provenance, but they should be treated as archived iteration history rather than the active physics-facing evidence layer.
+Earlier pre-pivot benchmark bundles were removed from the public result surface. Keep only artifacts that directly support the current execution-body deformation claim.

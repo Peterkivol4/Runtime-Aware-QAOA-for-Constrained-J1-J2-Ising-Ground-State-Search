@@ -3,9 +3,9 @@ from __future__ import annotations
 from pathlib import Path
 
 from ionmesh_runtime._internal import live_validation as live_validation_impl
-from hybrid_qaoa_portfolio.config import RunDeck
-from hybrid_qaoa_portfolio.live_certification import CertificationResult
-from hybrid_qaoa_portfolio.live_validation import save_live_validation_report
+from spinmesh_runtime.config import RunDeck
+from spinmesh_runtime.live_certification import CertificationResult
+from spinmesh_runtime.live_validation import save_live_validation_report
 
 
 def test_run_live_validation_suite_builds_repeatability_and_appendix_payload(monkeypatch) -> None:

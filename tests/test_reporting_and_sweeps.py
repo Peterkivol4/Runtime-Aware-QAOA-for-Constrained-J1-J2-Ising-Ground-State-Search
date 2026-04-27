@@ -2,8 +2,8 @@ from pathlib import Path
 
 import pandas as pd
 
-from hybrid_qaoa_portfolio.config import RunDeck
-from hybrid_qaoa_portfolio.pipeline import run_benchmark_study
+from spinmesh_runtime.config import RunDeck
+from spinmesh_runtime.pipeline import run_benchmark_study
 
 
 def test_validate_rejects_invalid_study_budget_ratio() -> None:
@@ -19,8 +19,8 @@ def test_validate_rejects_invalid_study_budget_ratio() -> None:
 def test_benchmark_study_emits_findings_and_spin_sweep(tmp_path: Path) -> None:
     cfg = RunDeck(
         runtime_mode="local_proxy",
-        n_assets=4,
-        budget=2,
+        n_spins=4,
+        magnetization_m=0,
         depth=1,
         fourier_modes=1,
         bo_iters=2,
@@ -32,8 +32,9 @@ def test_benchmark_study_emits_findings_and_spin_sweep(tmp_path: Path) -> None:
         use_zne=False,
         use_readout_mitigation=False,
         study_num_seeds=1,
-        study_regimes=("clustered",),
-        study_n_assets=(4, 6),
+        study_j2_ratios=(0.5,),
+        study_disorder_levels=(0.0,),
+        study_n_spins=(4, 6),
         study_budget_ratio=0.5,
         study_depths=(1,),
         study_shot_budgets=(16,),

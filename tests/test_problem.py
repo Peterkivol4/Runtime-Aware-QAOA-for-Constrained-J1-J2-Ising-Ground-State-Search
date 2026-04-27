@@ -1,7 +1,7 @@
 import numpy as np
 
-from hybrid_qaoa_portfolio.config import RunDeck
-from hybrid_qaoa_portfolio.problem import IsingSpinProblem
+from spinmesh_runtime.config import RunDeck
+from spinmesh_runtime.problem import IsingSpinProblem
 
 
 def test_fixed_magnetization_maps_to_cardinality() -> None:

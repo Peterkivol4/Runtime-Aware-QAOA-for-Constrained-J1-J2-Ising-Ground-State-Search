@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "spinmesh-runtime"
 version = "0.8.0"
-description = "Execution-body deformation framework for constrained J1-J2 Ising QAOA."
+description = "SpinMesh Runtime studies execution-body deformation in QAOA for constrained J1-J2 Ising systems."
 readme = "README.md"
 authors = [{name = "Hirrresh Sundrq"}]
 license = {text = "MIT"}
@@ -44,11 +44,8 @@ tracking = [
 ]
 
 [project.scripts]
-ionmesh-runtime = "ionmesh_runtime.cli:main"
 spinmesh-runtime = "spinmesh_runtime.cli:main"
 spinmesh-qaoa = "spinmesh_runtime.cli:main"
-hqp-runtime = "hybrid_qaoa_portfolio.cli:main"
-hybrid-qaoa = "hybrid_qaoa_portfolio.cli:main"
 
 [tool.setuptools]
 package-dir = {"" = "src"}

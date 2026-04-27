@@ -2,9 +2,9 @@
 
 **Short description:** SpinMesh studies QAOA as a physical instrument running through a real execution body: routing, calibration age, shot budget, backend topology, queue delay, session drift, and mitigation can deform the measured spin-system physics.
 
-![Runtime-aware QAOA performance profile](results/paper_full/submission_full_performance_profile.png)
+![Execution-body routing deformation curve](results/execution_body/routing_deformation_curve.png)
 
-**Headline result.** In the `paper_full` benchmark, valid-ratio collapse below `0.5` appears in `100.0%` of aggregated QAOA windows even though `bo_fourier` remains the matched-call sample-efficiency leader and the deployment recommendation still stays classical (`results/paper_full/submission_full_findings.json`, `results/paper_full/submission_full_executive_summary.md`).
+**Headline result.** In the fixed-circuit execution-body sweep, the same source-level QAOA circuit produced different physical-observable errors after routing and noisy execution. Transpiled depth ranged from `378` to `1568`, two-qubit gate count ranged from `96` to `400`, and the compact trust gate rejected all `90` quantum execution records because the execution body had deformed the measured physics too strongly (`results/execution_body/routing_deformation_report.md`, `results/execution_body/runtime_decision_boundary.md`).
 
 **Plain-English takeaway.** Runtime is not only cost. Runtime is a physical deformation channel. The current evidence does not support a practical QAOA win on the studied workloads, and that negative decision is part of the scientific output.
 
@@ -15,7 +15,7 @@ This repository studies **execution-body deformation** in QAOA for constrained r
 ## What this repo proves
 
 - QAOA can be evaluated as an executed physical experiment, not only as an abstract ansatz.
-- The current evidence is still classical-first: the saved `paper_full` decision layer recommends `exact_feasible`, not QAOA deployment.
+- The current evidence is still classical-first: the execution-body trust gate rejects the compact quantum records, while exact fixed-sector baselines remain stable.
 - The repo's value is decision-quality, not advantage-claiming: it tells you when runtime conditions make a quantum result less trustworthy than classical baselines.
 
 For one concrete negative-result memo, see [docs/why_classical_still_wins.md](docs/why_classical_still_wins.md).
@@ -31,7 +31,6 @@ For one concrete negative-result memo, see [docs/why_classical_still_wins.md](do
 - not a quantum advantage claim
 - not only an optimizer benchmark
 - not only runtime accounting
-- not a finance or portfolio optimizer
 
 See [docs/execution_body_deformation.md](docs/execution_body_deformation.md) for the full framing and experiment roadmap.
 
@@ -46,17 +45,17 @@ PYTHONPATH=src python tools/run_execution_body_experiments.py --output-dir resul
 pytest
 ```
 
-## Budget frontier snapshot
+## Execution-body snapshot
 
-Best observed QAOA windows from `results/paper_full/submission_full_aggregates.csv`, compared against the repo-wide execution recommendation in `results/paper_full/submission_full_executive_summary.md`:
+The compact execution-body study in `results/execution_body/` fixes the Hamiltonian, optimized angles, seed family, and QAOA depth, then varies routing, topology, layout, calibration age, shot body, session policy, and mitigation.
 
-| Workload size | Best observed QAOA valid ratio | Runtime burden in that window | Recommended method |
+| Workload | Execution body varied | Main observation | Trust decision |
 | --- | --- | --- | --- |
-| `n_spins = 4` | `0.5625` via `bo_direct` | `5152` shots, `8` objective calls, `0.127 s` mean runtime | `exact_feasible` |
-| `n_spins = 6` | `0.4583` via `bo_direct` | `2592` shots, `8` objective calls, `0.166 s` mean runtime | `exact_feasible` |
-| `n_spins = 8` | `0.3935` via `bo_fourier` | `3104` shots, `4` objective calls, `0.023 s` mean runtime | `exact_feasible` |
+| `n_spins = 6`, `J2/J1 = 0.5`, `p = 2` | topology, layout, routing method, transpiler level | two-qubit gate count correlates with correlation error at `r ~= 0.60` | `90 / 90` quantum records rejected |
+| same fixed source circuit | calibration age/noise scale | no new phase-label transition after the freshest routed execution; routing/noise had already moved the observed label | rejected before calibration could rescue trust |
+| same fixed source circuit | readout mitigation and ZNE-style extrapolation | ZNE improved energy error while worsening correlation error in one false-correction case | mitigation did not restore trust |
 
-The practical message is simple: pilot-scale QAOA can still be explored, but the current benchmark evidence stays classical-first once valid-sector reliability and runtime burden are accounted for together.
+The practical message is simple: QAOA can still be studied, but SpinMesh treats runtime as an experimental variable and rejects quantum outputs when the execution body makes the physics less trustworthy than a classical fixed-sector reference.
 
 ## Frustration-axis valid-ratio sweep
 
@@ -233,16 +232,16 @@ python -m spinmesh_runtime.cli \
   --output-prefix results/ising_study/ising_runtime_qaoa
 ```
 
-Pilot study:
+Execution-body deformation study:
 
 ```bash
-python tools/run_pilot_study.py
+PYTHONPATH=src python tools/run_execution_body_experiments.py --output-dir results/execution_body
 ```
 
-Paper-style local study:
+Frustration-axis valid-sector sweep:
 
 ```bash
-python tools/run_paper_study.py --profile full --label submission_full --output-dir results/paper_full
+PYTHONPATH=src python tools/run_frustration_axis_sweep.py --output-dir results/frustration_axis
 ```
 
 Live validation harness:

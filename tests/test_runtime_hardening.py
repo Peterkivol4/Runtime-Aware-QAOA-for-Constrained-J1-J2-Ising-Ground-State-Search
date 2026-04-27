@@ -2,11 +2,11 @@ from pathlib import Path
 
 from qiskit.quantum_info import SparsePauliOp
 
-from hybrid_qaoa_portfolio.config import RunDeck, TailBatch
-from hybrid_qaoa_portfolio.optimization import GaussianProcessBayesOptimizer
-from hybrid_qaoa_portfolio.pipeline import PenaltyController
-from hybrid_qaoa_portfolio.quantum import _observable_for_isa
-from hybrid_qaoa_portfolio.runtime_support import RuntimeSamplerFactory
+from spinmesh_runtime.config import RunDeck, TailBatch
+from spinmesh_runtime.optimization import GaussianProcessBayesOptimizer
+from spinmesh_runtime.pipeline import PenaltyController
+from spinmesh_runtime.quantum import _observable_for_isa
+from spinmesh_runtime.runtime_support import RuntimeSamplerFactory
 
 
 def test_contextual_bo_accepts_penalty_context() -> None:

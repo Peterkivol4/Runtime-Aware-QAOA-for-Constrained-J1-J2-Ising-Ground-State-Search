@@ -43,6 +43,6 @@ The hardware-like routed Aer sweep reproduces valid-sector collapse, but the col
 
 ## Artifacts
 
-- records CSV: `/Users/hirrreshsundrq/Documents/New project/runtime_aware_qaoa_portfolio_repo_full_rebuilt_v28/results/frustration_axis_aer/frustration_axis_aer_records.csv`
-- aggregates CSV: `/Users/hirrreshsundrq/Documents/New project/runtime_aware_qaoa_portfolio_repo_full_rebuilt_v28/results/frustration_axis_aer/frustration_axis_aer_aggregates.csv`
-- plot: `/Users/hirrreshsundrq/Documents/New project/runtime_aware_qaoa_portfolio_repo_full_rebuilt_v28/results/frustration_axis_aer/valid_ratio_vs_j2_ratio_aer.png`
+- records CSV: `results/frustration_axis_aer/frustration_axis_aer_records.csv`
+- aggregates CSV: `results/frustration_axis_aer/frustration_axis_aer_aggregates.csv`
+- plot: `results/frustration_axis_aer/valid_ratio_vs_j2_ratio_aer.png`

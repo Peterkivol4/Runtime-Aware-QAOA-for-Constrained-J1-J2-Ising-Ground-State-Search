@@ -229,6 +229,13 @@ def _write_csv(path: Path, rows: list[dict[str, Any]]) -> None:
             writer.writerow({key: row.get(key) for key in fieldnames})
 
 
+def _display_path(path: Path) -> str:
+    try:
+        return str(path.resolve().relative_to(REPO_ROOT))
+    except ValueError:
+        return str(path)
+
+
 def _plot_valid_ratio(aggregate_rows: list[dict[str, Any]], output_path: Path) -> None:
     plt = load_matplotlib_pyplot()
     fig, ax = plt.subplots(figsize=(8, 5))
@@ -346,9 +353,9 @@ def _render_report(
         "",
         "## Artifacts",
         "",
-        f"- records CSV: `{records_path}`",
-        f"- aggregates CSV: `{aggregates_path}`",
-        f"- plot: `{plot_path}`",
+        f"- records CSV: `{_display_path(records_path)}`",
+        f"- aggregates CSV: `{_display_path(aggregates_path)}`",
+        f"- plot: `{_display_path(plot_path)}`",
         "",
         "## Scientific caution",
         "",

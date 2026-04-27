@@ -1,8 +1,8 @@
 import sqlite3
 from pathlib import Path
 
-from hybrid_qaoa_portfolio.config import RunDeck
-from hybrid_qaoa_portfolio.pipeline import PenaltyController, run_benchmark_study
+from spinmesh_runtime.config import RunDeck
+from spinmesh_runtime.pipeline import PenaltyController, run_benchmark_study
 
 
 def test_augmented_lagrangian_penalty_grows_when_valid_ratio_collapses() -> None:
@@ -22,8 +22,8 @@ def test_augmented_lagrangian_penalty_grows_when_valid_ratio_collapses() -> None
 def test_benchmark_study_writes_sqlite_tracker(tmp_path: Path) -> None:
     prefix = tmp_path / "study"
     cfg = RunDeck(
-        n_assets=5,
-        budget=2,
+        n_spins=5,
+        magnetization_m=-1,
         depth=1,
         fourier_modes=1,
         bo_iters=2,
@@ -34,7 +34,8 @@ def test_benchmark_study_writes_sqlite_tracker(tmp_path: Path) -> None:
         sa_steps=8,
         base_shots=8,
         study_num_seeds=1,
-        study_regimes=("random",),
+        study_j2_ratios=(0.5,),
+        study_disorder_levels=(0.0,),
         study_depths=(1,),
         study_shot_budgets=(8,),
         study_noise_levels=(0.0,),
@@ -50,7 +51,7 @@ def test_benchmark_study_writes_sqlite_tracker(tmp_path: Path) -> None:
         assert record_count > 0
 
 
-from hybrid_qaoa_portfolio.tracking import RunLedger
+from spinmesh_runtime.tracking import RunLedger
 
 
 def test_sqlite_tracker_enables_wal_mode(tmp_path: Path) -> None:

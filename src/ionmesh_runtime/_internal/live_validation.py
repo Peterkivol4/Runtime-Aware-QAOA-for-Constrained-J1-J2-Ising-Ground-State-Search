@@ -20,9 +20,9 @@ def _now_iso() -> str:
 def _budget_for_system_size(cfg: RunDeck, n_spins: int) -> int:
     if cfg.study_budget_ratio is not None:
         return max(1, min(n_spins, int(round(n_spins * cfg.study_budget_ratio))))
-    if n_spins == cfg.n_assets:
+    if n_spins == cfg.n_spins:
         return cfg.budget
-    scaled = cfg.budget / max(1, cfg.n_assets)
+    scaled = cfg.budget / max(1, cfg.n_spins)
     return max(1, min(n_spins, int(round(n_spins * scaled))))
 
 

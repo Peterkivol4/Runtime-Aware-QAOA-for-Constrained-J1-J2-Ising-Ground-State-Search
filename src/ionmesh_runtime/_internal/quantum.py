@@ -243,12 +243,12 @@ def _build_parametric_qaoa_circuit(cfg: RunDeck, gamma: Any, beta: Any, *, measu
     tools = _qiskit_core_tools()
     if tools is None:
         raise ImportError("qiskit is required to build quantum circuits.")
-    circuit = tools["QuantumCircuit"](cfg.n_assets)
-    _prepare_dicke_state(cfg.n_assets, cfg.budget, circuit)
+    circuit = tools["QuantumCircuit"](cfg.n_spins)
+    _prepare_dicke_state(cfg.n_spins, cfg.budget, circuit)
     for layer in range(cfg.depth):
-        for qubit in range(cfg.n_assets):
+        for qubit in range(cfg.n_spins):
             circuit.rz(gamma[layer], qubit)
-        for qubit in range(cfg.n_assets - 1):
+        for qubit in range(cfg.n_spins - 1):
             circuit.rxx(beta[layer], qubit, qubit + 1)
             circuit.ryy(beta[layer], qubit, qubit + 1)
     if measure:
@@ -287,7 +287,7 @@ class ProxyQuantumRunner(QuantumRunner):
         self.cfg = cfg
         self.problem = problem
         self.rng = np.random.default_rng(cfg.seed)
-        self.mitigator = ReadoutMitigator(cfg.n_assets, cfg.readout_p10, cfg.readout_p01)
+        self.mitigator = ReadoutMitigator(cfg.n_spins, cfg.readout_p10, cfg.readout_p01)
         self.evaluator = SpinMeasurementEvaluator(cfg, problem)
         self.bitstrings = self.evaluator.bitstrings
         self.bit_arrays = self.evaluator.bit_arrays
@@ -400,7 +400,7 @@ class AerQuantumRunner(QuantumRunner):  # pragma: no cover - optional dependency
         self.cfg = cfg
         self.problem = problem
         self.evaluator = SpinMeasurementEvaluator(cfg, problem)
-        self.mitigator = ReadoutMitigator(cfg.n_assets, cfg.readout_p10, cfg.readout_p01)
+        self.mitigator = ReadoutMitigator(cfg.n_spins, cfg.readout_p10, cfg.readout_p01)
         self.gamma = ParameterVector("gamma", cfg.depth)
         self.beta = ParameterVector("beta", cfg.depth)
         self.measured_circuit = _build_parametric_qaoa_circuit(cfg, self.gamma, self.beta, measure=True)
@@ -497,7 +497,7 @@ class RuntimeQuantumRunner(QuantumRunner):
         self.cfg = cfg
         self.problem = problem
         self.evaluator = SpinMeasurementEvaluator(cfg, problem)
-        self.mitigator = ReadoutMitigator(cfg.n_assets, cfg.readout_p10, cfg.readout_p01)
+        self.mitigator = ReadoutMitigator(cfg.n_spins, cfg.readout_p10, cfg.readout_p01)
         self.gamma = ParameterVector("gamma", cfg.depth)
         self.beta = ParameterVector("beta", cfg.depth)
         self.ansatz_circuit = _build_parametric_qaoa_circuit(cfg, self.gamma, self.beta, measure=False)
@@ -616,13 +616,10 @@ def build_quantum_runner(cfg: RunDeck, problem: IsingSpinProblem) -> Any:
         return AerQuantumRunner(effective_cfg, problem)
     return ProxyQuantumRunner(effective_cfg, problem)
 
-PortfolioMeasurementEvaluator = SpinMeasurementEvaluator
-
 __all__ = [
     'RunnerMetadata',
     'ReadoutMitigator',
     'SpinMeasurementEvaluator',
-    'PortfolioMeasurementEvaluator',
     'NoiseModelFactory',
     'default_penalty_state',
     'apply_calibration_snapshot',
