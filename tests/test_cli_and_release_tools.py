@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import os
 import subprocess
 import sys
 from pathlib import Path
@@ -132,6 +133,37 @@ def test_scaling_audit_dry_run_emits_report_plan(tmp_path: Path) -> None:
     assert '"mode": "dry_run"' in proc.stdout
     assert '"runtime_mode": "local_proxy"' in proc.stdout
     assert 'scaling_audit.json' in proc.stdout
+
+
+def test_runtime_trust_report_cli_reads_execution_body_csv(tmp_path: Path) -> None:
+    csv_path = tmp_path / "execution_deformation_records.csv"
+    csv_path.write_text(
+        "problem_id,backend_name,calibration_snapshot_id,calibration_age_seconds,n_spins,p_layers,j1,j2,h,"
+        "source_circuit_depth,transpiled_circuit_depth,two_qubit_gate_count,swap_count,layout_distance_score,"
+        "shots,queue_delay_seconds,session_duration_seconds,energy_error_vs_exact,energy_error_vs_ideal_qaoa,"
+        "magnetization_error,correlation_error,structure_factor_error,phase_label_changed,sample_variance,"
+        "confidence_interval_width,mitigation_shift,mitigation_instability,runtime_seconds,quantum_decision,rejection_reason\n"
+        "p1,aer,snap,60,6,2,1.0,0.5,0.0,20,24,18,0,1.0,1024,0,1,0.01,0.02,0.01,0.01,,false,0.02,0.05,0.01,0.01,1.0,run_quantum,\n"
+    )
+    proc = subprocess.run(
+        [
+            sys.executable,
+            "-m",
+            "spinmesh_runtime.cli",
+            "--mode",
+            "runtime_trust_report",
+            "--execution-body-input",
+            str(csv_path),
+            "--trust-policy",
+            "configs/runtime_trust_gate.yaml",
+        ],
+        capture_output=True,
+        text=True,
+        env={**os.environ, "PYTHONPATH": "src"},
+        check=True,
+    )
+    assert "# Runtime Decision Boundary" in proc.stdout
+    assert "accept_quantum_result" in proc.stdout
 
 
 def test_setup_logging_writes_under_logs_directory(tmp_path: Path, monkeypatch) -> None:

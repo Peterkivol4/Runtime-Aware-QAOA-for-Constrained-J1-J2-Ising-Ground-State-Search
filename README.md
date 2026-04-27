@@ -1,29 +1,87 @@
-# Runtime-Aware QAOA for Constrained J1-J2 Ising Ground-State Search
+# SpinMesh Runtime: Execution-Body Deformation in QAOA for Frustrated Spin Systems
 
-**Short description:** Reproducible benchmark for constrained J1-J2 Ising QAOA under realistic routing, mitigation, session, and hardware-cost constraints.
+**Short description:** SpinMesh studies QAOA as a physical instrument running through a real execution body: routing, calibration age, shot budget, backend topology, queue delay, session drift, and mitigation can deform the measured spin-system physics.
 
 ![Runtime-aware QAOA performance profile](results/paper_full/submission_full_performance_profile.png)
 
 **Headline result.** In the `paper_full` benchmark, valid-ratio collapse below `0.5` appears in `100.0%` of aggregated QAOA windows even though `bo_fourier` remains the matched-call sample-efficiency leader and the deployment recommendation still stays classical (`results/paper_full/submission_full_findings.json`, `results/paper_full/submission_full_executive_summary.md`).
 
-This repository benchmarks **runtime-aware QAOA** on the constrained random-bond **J1-J2 Ising model** on square-lattice geometries under realistic NISQ execution constraints: limited shots, routing overhead, mitigation costs, session management, and backend variability.
+**Plain-English takeaway.** Runtime is not only cost. Runtime is a physical deformation channel. The current evidence does not support a practical QAOA win on the studied workloads, and that negative decision is part of the scientific output.
 
-The active package surface is `spinmesh_runtime`; historical import shims remain only for backward compatibility.
+This repository studies **execution-body deformation** in QAOA for constrained random-bond **J1-J2 Ising** systems. Instead of treating runtime as bookkeeping, SpinMesh asks whether the physical conclusion remains stable after a fixed source-level circuit passes through routing, calibration drift, finite shots, backend topology, session policy, and measurement correction.
+
+`spinmesh_runtime` is the supported public package surface; `ionmesh_runtime` remains only for internal compatibility and backward support.
+
+## What this repo proves
+
+- QAOA can be evaluated as an executed physical experiment, not only as an abstract ansatz.
+- The current evidence is still classical-first: the saved `paper_full` decision layer recommends `exact_feasible`, not QAOA deployment.
+- The repo's value is decision-quality, not advantage-claiming: it tells you when runtime conditions make a quantum result less trustworthy than classical baselines.
+
+For one concrete negative-result memo, see [docs/why_classical_still_wins.md](docs/why_classical_still_wins.md).
+
+## What this project is
+
+- a study of whether execution conditions change physical conclusions in QAOA experiments
+- a provenance layer for routing, calibration, shot, session, mitigation, and backend effects
+- a trust-gated decision framework that can reject quantum results when the execution body has deformed the physics too much
+
+## What this project is not
+
+- not a quantum advantage claim
+- not only an optimizer benchmark
+- not only runtime accounting
+- not a finance or portfolio optimizer
+
+See [docs/execution_body_deformation.md](docs/execution_body_deformation.md) for the full framing and experiment roadmap.
+
+## One-command reproducibility
+
+Run these from an activated virtual environment:
+
+```bash
+python -m pip install -e ".[dev,quantum,runtime]"
+python -m spinmesh_runtime.cli --mode single --runtime-mode local_proxy --n-spins 6 --magnetization-m 0 --lattice-type j1j2_frustrated --j1-coupling 1.0 --j2-coupling 0.5 --depth 2 --fourier-modes 2
+PYTHONPATH=src python tools/run_execution_body_experiments.py --output-dir results/execution_body
+pytest
+```
+
+## Budget frontier snapshot
+
+Best observed QAOA windows from `results/paper_full/submission_full_aggregates.csv`, compared against the repo-wide execution recommendation in `results/paper_full/submission_full_executive_summary.md`:
+
+| Workload size | Best observed QAOA valid ratio | Runtime burden in that window | Recommended method |
+| --- | --- | --- | --- |
+| `n_spins = 4` | `0.5625` via `bo_direct` | `5152` shots, `8` objective calls, `0.127 s` mean runtime | `exact_feasible` |
+| `n_spins = 6` | `0.4583` via `bo_direct` | `2592` shots, `8` objective calls, `0.166 s` mean runtime | `exact_feasible` |
+| `n_spins = 8` | `0.3935` via `bo_fourier` | `3104` shots, `4` objective calls, `0.023 s` mean runtime | `exact_feasible` |
+
+The practical message is simple: pilot-scale QAOA can still be explored, but the current benchmark evidence stays classical-first once valid-sector reliability and runtime burden are accounted for together.
+
+## Frustration-axis valid-ratio sweep
+
+The fine `J2/J1` sweep in `results/frustration_axis/` fixes `n_spins = 8`, `p = 2`, and `256` shots while sweeping `J2/J1 = 0.0, 0.1, ..., 1.0`. Under the clean local-proxy Dicke/XY path, valid-sector ratio declines as frustration is increased but does **not** collapse below `0.5`; at `J2/J1 = 0.5`, the all-method mean is `0.8783`.
+
+The routed Aer control in `results/frustration_axis_aer/` fixes a six-spin routed execution body and does reproduce collapse, but it is broad rather than sharply localized: the mean valid-sector ratio at `J2/J1 = 0.5` is `0.3166`, while the endpoint mean is `0.3154`.
+
+This refines the headline: valid-ratio collapse is currently better explained as an execution-body deformation effect than as a sharp intrinsic dip exactly at the `J2/J1 = 0.5` point.
 
 ## Research question
 
-> Under realistic shot, routing, mitigation, and session-management constraints, when does runtime-aware QAOA improve constrained J1-J2 Ising ground-state approximation quality over strong classical baselines and lower-cost QAOA tuning strategies?
+> For a fixed frustrated-spin QAOA problem, when do runtime conditions change the physical conclusion of the experiment: energy ranking, magnetization, correlations, phase identification, or quantum-vs-classical decision, even if the source-level circuit and optimizer are unchanged?
 
 ## Main contribution
 
-The main contribution of this repo is not a claim of quantum advantage. It is a **reproducible benchmarking framework** that combines:
+The main contribution of this repo is not a claim of quantum advantage. It is a **reproducible execution-body framework** that combines:
 
 - a problem layer for constrained frustrated-spin instances
 - a runtime-aware execution contract across `local_proxy`, `aer`, and IBM Runtime paths
+- an `ExecutionDeformationVector` record for routing, calibration, shot, session, mitigation, and observable deformation
+- a `RuntimeTrustGate` that accepts, warns, or rejects quantum results using canonical physical trust reasons
 - a decision / utility-frontier layer that converts benchmark outputs into an execution recommendation
 - a study pipeline that compares classical baselines, QAOA variants, mitigation bundles, and backend choices under matched operational constraints
 
-On small systems, the framework is honest about negative or flat results. That is a feature, not a bug.
+On small systems, the framework is honest about negative or flat results. Classical baselines are not only faster here; they are often more physically stable under the measured execution conditions.
 
 ## Physics model
 
@@ -106,7 +164,9 @@ A study sweep writes:
   - `*_mitigation_vs_shots.png`
   - `*_performance_profile.png`
 
-## Install
+Execution-body studies write records, trust reports, and plots under `results/execution_body/`; see [results/execution_body/README.md](results/execution_body/README.md). The current compact execution-body sweep contains `90` records and shows that the same fixed source circuit changes observable error as transpiled depth and two-qubit count inflate.
+
+## Detailed install options
 
 Base install:
 
@@ -135,7 +195,7 @@ With developer extras:
 pip install -e ".[dev,quantum,runtime]"
 ```
 
-## CLI examples
+## More CLI examples
 
 Smoke test:
 
@@ -191,14 +251,24 @@ Live validation harness:
 python tools/run_live_validation.py --runtime-backend ibm_fez --live-repeats 2 --aer-repeats 2
 ```
 
+Runtime trust report from execution-deformation records:
+
+```bash
+python -m spinmesh_runtime.cli \
+  --mode runtime_trust_report \
+  --execution-body-input results/execution_body/execution_deformation_records.csv \
+  --trust-policy configs/runtime_trust_gate.yaml \
+  --runtime-trust-output results/execution_body/runtime_decision_boundary.md
+```
+
 ## Project structure
 
 ```text
 src/spinmesh_runtime/        active public package path
-src/ionmesh_runtime/         implementation package
 tests/                       regression and benchmark tests
 tools/                       study, validation, and release helpers
 docs/                        architecture and reporting notes
+configs/                     trust-gate and run-policy examples
 ```
 
 ## Notes

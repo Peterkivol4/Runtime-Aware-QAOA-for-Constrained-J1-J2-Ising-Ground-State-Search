@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "spinmesh-runtime"
 version = "0.8.0"
-description = "Runtime-aware benchmarking engine for constrained J1-J2 Ising ground-state search."
+description = "Execution-body deformation framework for constrained J1-J2 Ising QAOA."
 readme = "README.md"
 authors = [{name = "Hirrresh Sundrq"}]
 license = {text = "MIT"}

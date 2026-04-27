@@ -1,0 +1,41 @@
+{
+  "problem_id": "frustrated_n6_j2_05_p2_seed314",
+  "n_records": 90,
+  "experiment_families": [
+    "routing",
+    "calibration_age",
+    "shot_body",
+    "session_body",
+    "mitigation_body",
+    "runtime_decision_boundary"
+  ],
+  "record_experiments": [
+    "calibration_age",
+    "mitigation_body",
+    "routing",
+    "session_body",
+    "shot_body"
+  ],
+  "source_depth": 18,
+  "frozen_gamma": [
+    1.8302601337709754,
+    -2.224942585917786
+  ],
+  "frozen_beta": [
+    1.4467101263428215,
+    0.9776637524177376
+  ],
+  "ideal_source_metrics": {
+    "energy": -2.523909054752926,
+    "magnetization": 2.1612332432727255e-32,
+    "nn_correlation": -0.3934477492348185,
+    "nnn_correlation": 0.11511259494540174,
+    "valid_ratio": 0.9999999999999779,
+    "phase_label": "nearest_neighbor_antiferromagnetic",
+    "energy_variance": 4.451481446506482
+  },
+  "exact_feasible_energy": -5.0,
+  "exact_feasible_bitstring": "101010",
+  "accepted_records": 0,
+  "rejected_records": 90
+}

@@ -12,6 +12,7 @@ from typing import Any, Callable
 from ionmesh_runtime.interfaces import RuntimeSession
 from .config import RunDeck
 from .constants import DEFAULT_GENERIC_BACKEND, DEFAULT_NOISE_PROFILE, DEFAULT_RUNTIME_MESSAGES
+from .execution_body import count_swap_operations, count_two_qubit_operations
 from .secrets import SecretsManager
 from .optional_deps import load_qiskit_fake_backend, load_qiskit_runtime_v2
 
@@ -295,6 +296,7 @@ class RuntimeSamplerFactory:
         backend_name = getattr(backend, "name", None)
         if callable(backend_name):
             backend_name = backend_name()
+        operations = RuntimeSamplerFactory.executable_instruction_names(isa_circuit)
         payload = {
             "backend_name": backend_name or str(backend),
             "optimization_level": int(optimization_level),
@@ -302,7 +304,9 @@ class RuntimeSamplerFactory:
             "depth": int(isa_circuit.depth() if hasattr(isa_circuit, "depth") else 0),
             "size": int(isa_circuit.size() if hasattr(isa_circuit, "size") else 0),
             "basis_gates": basis,
-            "executable_operations": RuntimeSamplerFactory.executable_instruction_names(isa_circuit),
+            "executable_operations": operations,
+            "two_qubit_gate_count": count_two_qubit_operations(operations),
+            "swap_count": count_swap_operations(operations),
             "basis_violations": RuntimeSamplerFactory.isa_basis_violations(backend, isa_circuit),
             "layout": str(getattr(isa_circuit, "layout", None)),
         }

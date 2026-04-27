@@ -1,0 +1,41 @@
+{
+  "records": 33,
+  "ratios": [
+    0.0,
+    0.1,
+    0.2,
+    0.3,
+    0.4,
+    0.5,
+    0.6,
+    0.7,
+    0.8,
+    0.9,
+    1.0
+  ],
+  "seeds": [
+    910,
+    911,
+    912
+  ],
+  "n_spins": 6,
+  "depth": 2,
+  "shots": 2048,
+  "topology_model": "forked_heavy_hex",
+  "routing_method": "sabre",
+  "transpiler_optimization_level": 1,
+  "records_path": "/Users/hirrreshsundrq/Documents/New project/runtime_aware_qaoa_portfolio_repo_full_rebuilt_v28/results/frustration_axis_aer/frustration_axis_aer_records.csv",
+  "aggregates_path": "/Users/hirrreshsundrq/Documents/New project/runtime_aware_qaoa_portfolio_repo_full_rebuilt_v28/results/frustration_axis_aer/frustration_axis_aer_aggregates.csv",
+  "plot_path": "/Users/hirrreshsundrq/Documents/New project/runtime_aware_qaoa_portfolio_repo_full_rebuilt_v28/results/frustration_axis_aer/valid_ratio_vs_j2_ratio_aer.png",
+  "report_path": "/Users/hirrreshsundrq/Documents/New project/runtime_aware_qaoa_portfolio_repo_full_rebuilt_v28/results/frustration_axis_aer/valid_ratio_frustration_axis_aer_report.md",
+  "elapsed_seconds": 17.499300718307495,
+  "center_vs_edges": {
+    "center_mean_valid_ratio": 0.3165690104166667,
+    "edge_mean_valid_ratio": 0.3154296875,
+    "shoulder_mean_valid_ratio": 0.31583658854166663,
+    "center_minus_edge_mean": 0.0011393229166666852,
+    "center_minus_shoulder_mean": 0.0007324218750000555,
+    "center_is_lower_than_edges": false,
+    "center_is_lower_than_shoulders": false
+  }
+}

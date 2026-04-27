@@ -1,6 +1,8 @@
 from __future__ import annotations
 
 import argparse
+import json
+from pathlib import Path
 
 from .config import (
     RunDeck,
@@ -13,6 +15,7 @@ from .config import (
     SUPPORTED_SIDECAR_POLICIES,
     SUPPORTED_TRACKERS,
 )
+from .execution_body import RuntimeTrustGate, build_runtime_trust_report, load_execution_deformation_csv
 from .live_certification import run_live_certification_check, save_certification_report
 from .pipeline import run_benchmark_study, run_decision, run_single_benchmark, run_smoke_test
 from .tracking import json_dumps_clean, sanitize_json_payload
@@ -20,8 +23,8 @@ from .tracking import json_dumps_clean, sanitize_json_payload
 
 def build_parser() -> argparse.ArgumentParser:
     defaults = RunDeck.from_environment(validate=False)
-    parser = argparse.ArgumentParser(description="Runtime-aware QAOA benchmark for constrained J1-J2 Ising ground-state search")
-    parser.add_argument("--mode", type=str, default="study", help="One of: smoke, single, study, decision, live_cert.")
+    parser = argparse.ArgumentParser(description="SpinMesh Runtime studies execution-body deformation in constrained J1-J2 QAOA.")
+    parser.add_argument("--mode", type=str, default="study", help="One of: smoke, single, study, decision, live_cert, runtime_trust_report.")
     parser.add_argument("--seed", type=int, default=defaults.seed)
     parser.add_argument("--n-spins", dest="n_spins", type=int, default=defaults.n_spins)
     parser.add_argument("--n-assets", dest="n_spins", type=int, help=argparse.SUPPRESS)
@@ -88,6 +91,9 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--study-j2-ratios", type=str, default=",".join(str(v) for v in defaults.study_j2_ratios))
     parser.add_argument("--study-disorder-levels", type=str, default=",".join(str(v) for v in defaults.study_disorder_levels))
     parser.add_argument("--output-prefix", type=str, default=defaults.output_prefix)
+    parser.add_argument("--execution-body-input", type=str, default=None)
+    parser.add_argument("--trust-policy", type=str, default=None)
+    parser.add_argument("--runtime-trust-output", type=str, default=None)
 
     parser.add_argument("--use-noise", dest="use_noise", action="store_true")
     parser.add_argument("--no-noise", dest="use_noise", action="store_false")
@@ -203,12 +209,54 @@ def _stdout_result(event: str, payload: dict[str, object]) -> None:
     print(json_dumps_clean({"event": event, **payload}), flush=True)
 
 
+def _load_runtime_trust_gate(path: str | None) -> RuntimeTrustGate:
+    if path is None:
+        return RuntimeTrustGate(
+            max_calibration_age_seconds=1800.0,
+            max_two_qubit_gate_inflation=2.0,
+            max_confidence_interval_width=0.2,
+            max_mitigation_shift=0.1,
+            max_observable_error=0.2,
+        )
+    text = Path(path).read_text()
+    if path.endswith(".json"):
+        payload = json.loads(text)
+    else:
+        payload = _parse_flat_policy(text)
+    return RuntimeTrustGate(**payload)
+
+
+def _parse_flat_policy(text: str) -> dict[str, object]:
+    payload: dict[str, object] = {}
+    for line in text.splitlines():
+        stripped = line.split("#", 1)[0].strip()
+        if not stripped or ":" not in stripped:
+            continue
+        key, value = (part.strip() for part in stripped.split(":", 1))
+        if value.lower() in {"true", "false"}:
+            payload[key] = value.lower() == "true"
+        else:
+            payload[key] = float(value)
+    return payload
+
+
 def main() -> None:
     parser = build_parser()
     args = parser.parse_args()
     normalized_mode = {"advisor": "decision"}.get(args.mode, args.mode)
-    if normalized_mode not in {"smoke", "single", "study", "decision", "live_cert"}:
+    if normalized_mode not in {"smoke", "single", "study", "decision", "live_cert", "runtime_trust_report"}:
         parser.error(f"Unsupported mode: {args.mode}")
+    if normalized_mode == "runtime_trust_report":
+        if not args.execution_body_input:
+            parser.error("--execution-body-input is required for runtime_trust_report.")
+        gate = _load_runtime_trust_gate(args.trust_policy)
+        records = load_execution_deformation_csv(args.execution_body_input)
+        report = build_runtime_trust_report(records, gate)
+        if args.runtime_trust_output:
+            Path(args.runtime_trust_output).write_text(report)
+        else:
+            print(report, flush=True)
+        return
     cfg = deck_from_args(args)
     if normalized_mode == "smoke":
         result = run_smoke_test(cfg)

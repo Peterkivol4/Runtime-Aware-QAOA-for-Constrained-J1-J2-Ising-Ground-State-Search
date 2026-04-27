@@ -1,0 +1,42 @@
+{
+  "records": 220,
+  "aggregates": 55,
+  "ratios": [
+    0.0,
+    0.1,
+    0.2,
+    0.3,
+    0.4,
+    0.5,
+    0.6,
+    0.7,
+    0.8,
+    0.9,
+    1.0
+  ],
+  "methods": [
+    "bo_fourier",
+    "spsa_fourier",
+    "random_fourier",
+    "bo_direct"
+  ],
+  "n_spins": 8,
+  "depth": 2,
+  "shots": 256,
+  "num_seeds": 5,
+  "output_dir": "/Users/hirrreshsundrq/Documents/New project/runtime_aware_qaoa_portfolio_repo_full_rebuilt_v28/results/frustration_axis",
+  "records_path": "/Users/hirrreshsundrq/Documents/New project/runtime_aware_qaoa_portfolio_repo_full_rebuilt_v28/results/frustration_axis/frustration_axis_valid_ratio_records.csv",
+  "aggregates_path": "/Users/hirrreshsundrq/Documents/New project/runtime_aware_qaoa_portfolio_repo_full_rebuilt_v28/results/frustration_axis/frustration_axis_valid_ratio_aggregates.csv",
+  "plot_path": "/Users/hirrreshsundrq/Documents/New project/runtime_aware_qaoa_portfolio_repo_full_rebuilt_v28/results/frustration_axis/valid_ratio_vs_j2_ratio.png",
+  "report_path": "/Users/hirrreshsundrq/Documents/New project/runtime_aware_qaoa_portfolio_repo_full_rebuilt_v28/results/frustration_axis/valid_ratio_frustration_axis_report.md",
+  "elapsed_seconds": 12.893242120742798,
+  "center_vs_edges": {
+    "center_mean_valid_ratio": 0.8783203125,
+    "edge_mean_valid_ratio": 0.8953125,
+    "shoulder_mean_valid_ratio": 0.85771484375,
+    "center_minus_edge_mean": -0.016992187499999978,
+    "center_minus_shoulder_mean": 0.020605468750000022,
+    "center_is_lower_than_edges": true,
+    "center_is_lower_than_shoulders": false
+  }
+}

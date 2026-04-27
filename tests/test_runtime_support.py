@@ -17,6 +17,8 @@ def test_generic_backend_isa_pass_manager_routes_circuit() -> None:
     assert isa.num_qubits == 7
     assert metadata["basis_violations"] == []
     assert "cx" in metadata["executable_operations"]
+    assert metadata["two_qubit_gate_count"] >= 1
+    assert "swap_count" in metadata
 
 
 def test_runtime_session_manager_falls_back_to_backend_on_open_plan_rejection(monkeypatch: pytest.MonkeyPatch) -> None:
