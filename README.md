@@ -10,6 +10,10 @@ SpinMesh is intentionally not framed as a quantum-advantage demo. It is a refusa
 
 **Plain-English takeaway.** The negative result is the point. If a quantum workflow cannot preserve the physical sector, correlations, and decision stability after execution, then low-energy samples are not enough. The classical result is not just cheaper here; it is more trustworthy.
 
+If you want the running process and not just the conclusion, read [RESEARCH_JOURNAL.md](RESEARCH_JOURNAL.md).
+
+I built this after [LayerField QAOA](https://github.com/Peterkivol4/portfolio-qaoa-characterization) made me suspicious of clean depth stories and before [FieldLine VQE](https://github.com/Peterkivol4/Tfim-vqe-symmetry-bench) and [TeleportDim](https://github.com/Peterkivol4/Teleportdim-hardware-study) because I wanted to isolate one uncomfortable question first: what if the execution environment itself is changing the physics more than the source-level circuit does?
+
 This repository studies **execution-body deformation** in QAOA for constrained random-bond **J1-J2 Ising** systems. Instead of treating runtime as bookkeeping, SpinMesh asks whether the physical conclusion remains stable after a fixed source-level circuit passes through routing, calibration drift, finite shots, backend topology, session policy, and measurement correction.
 
 `spinmesh_runtime` is the supported public package surface; `ionmesh_runtime` remains only for internal compatibility and backward support.
