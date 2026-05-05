@@ -6,7 +6,7 @@ This repository is organized around five layers:
 2. **Baseline layer** in `baselines.py` provides exact search, local-field greedy, local search, simulated annealing, random feasible search, and classical surrogate search.
 3. **Quantum execution layer** in `quantum.py` and `runtime_support.py` prepares fixed-magnetization initial states, separates optimization-time objective evaluation from final readout, and supports proxy, Aer, and Runtime V2 backends.
 4. **Optimization layer** in `optimization.py` and `pipeline.py` handles Fourier/direct parameterizations, BO/SPSA/random tuning, penalty schedules, checkpointing, and shot-governor behavior.
-5. **Tracking and reporting layer** in `tracking.py`, `plotting.py`, and `decision.py` writes JSON/CSV/SQLite artifacts, findings reports, performance profiles, utility frontiers, and execution recommendations.
+5. **Tracking and reporting layer** in `tracking.py`, `plotting.py`, and `decision.py` writes JSON/CSV/SQLite artifacts, findings reports, trust reports, utility frontiers, and rejection recommendations.
 
 ## Runtime boundary
 

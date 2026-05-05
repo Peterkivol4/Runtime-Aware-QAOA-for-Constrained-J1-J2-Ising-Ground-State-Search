@@ -1,24 +1,28 @@
-# SpinMesh Runtime: Execution-Body Deformation in QAOA for Frustrated Spin Systems
+# SpinMesh Runtime: A Dissent Memo on QAOA Under Execution-Body Deformation
 
-**Short description:** SpinMesh studies QAOA as a physical instrument running through a real execution body: routing, calibration age, shot budget, backend topology, queue delay, session drift, and mitigation can deform the measured spin-system physics.
+**Claim.** Runtime is a physical deformation channel. This repo measures how much it deforms, and on current workloads the answer is: too much to trust QAOA over classical.
+
+SpinMesh is intentionally not framed as a quantum-advantage demo. It is a refusal framework: hold the Hamiltonian, ansatz, angles, and seed fixed; send the circuit through routing, calibration age, finite shots, backend topology, queue delay, session drift, and mitigation; then ask whether the measured physics still deserves trust.
 
 ![Execution-body routing deformation curve](results/execution_body/routing_deformation_curve.png)
 
-**Headline result.** In the fixed-circuit execution-body sweep, the same source-level QAOA circuit produced different physical-observable errors after routing and noisy execution. Transpiled depth ranged from `378` to `1568`, two-qubit gate count ranged from `96` to `400`, and the compact trust gate rejected all `90` quantum execution records because the execution body had deformed the measured physics too strongly (`results/execution_body/routing_deformation_report.md`, `results/execution_body/runtime_decision_boundary.md`).
+**Current verdict.** In the fixed-circuit execution-body sweep, the same source-level QAOA circuit produced different physical-observable errors after routing and noisy execution. Transpiled depth ranged from `378` to `1568`, two-qubit gate count ranged from `96` to `400`, and the compact trust gate rejected all `90` quantum execution records because the execution body had deformed the measured physics too strongly (`results/execution_body/routing_deformation_report.md`, `results/execution_body/runtime_decision_boundary.md`).
 
-**Plain-English takeaway.** Runtime is not only cost. Runtime is a physical deformation channel. The current evidence does not support a practical QAOA win on the studied workloads, and that negative decision is part of the scientific output.
+**Plain-English takeaway.** The negative result is the point. If a quantum workflow cannot preserve the physical sector, correlations, and decision stability after execution, then low-energy samples are not enough. The classical result is not just cheaper here; it is more trustworthy.
 
 This repository studies **execution-body deformation** in QAOA for constrained random-bond **J1-J2 Ising** systems. Instead of treating runtime as bookkeeping, SpinMesh asks whether the physical conclusion remains stable after a fixed source-level circuit passes through routing, calibration drift, finite shots, backend topology, session policy, and measurement correction.
 
 `spinmesh_runtime` is the supported public package surface; `ionmesh_runtime` remains only for internal compatibility and backward support.
 
-## What this repo proves
+## What this repo argues
 
 - QAOA can be evaluated as an executed physical experiment, not only as an abstract ansatz.
-- The current evidence is still classical-first: the execution-body trust gate rejects the compact quantum records, while exact fixed-sector baselines remain stable.
-- The repo's value is decision-quality, not advantage-claiming: it tells you when runtime conditions make a quantum result less trustworthy than classical baselines.
+- The same Hamiltonian and ansatz are not the same experiment after routing, finite shots, drift, and mitigation.
+- Valid-sector leakage is not cosmetic noise; it is evidence that the measured state has left the physical sector being studied.
+- The current evidence is classical-first because the trust gate rejects the compact quantum records while exact fixed-sector baselines remain stable.
+- The repo's value is decision-quality, not advantage-claiming: it tells you when to stop paying for a quantum result.
 
-For one concrete negative-result memo, see [docs/why_classical_still_wins.md](docs/why_classical_still_wins.md).
+For the concrete dissent memo, see [docs/why_i_dont_trust_this_result.md](docs/why_i_dont_trust_this_result.md).
 
 ## What this project is
 
@@ -45,17 +49,13 @@ PYTHONPATH=src python tools/run_execution_body_experiments.py --output-dir resul
 pytest
 ```
 
-## Execution-body snapshot
+## The Dissent
 
-The compact execution-body study in `results/execution_body/` fixes the Hamiltonian, optimized angles, seed family, and QAOA depth, then varies routing, topology, layout, calibration age, shot body, session policy, and mitigation.
+The compact execution-body study in `results/execution_body/` fixes the Hamiltonian, optimized angles, seed family, and QAOA depth, then varies routing, topology, layout, calibration age, shot body, session policy, and mitigation. The source experiment stays fixed. The execution body changes.
 
-| Workload | Execution body varied | Main observation | Trust decision |
-| --- | --- | --- | --- |
-| `n_spins = 6`, `J2/J1 = 0.5`, `p = 2` | topology, layout, routing method, transpiler level | two-qubit gate count correlates with correlation error at `r ~= 0.60` | `90 / 90` quantum records rejected |
-| same fixed source circuit | calibration age/noise scale | no new phase-label transition after the freshest routed execution; routing/noise had already moved the observed label | rejected before calibration could rescue trust |
-| same fixed source circuit | readout mitigation and ZNE-style extrapolation | ZNE improved energy error while worsening correlation error in one false-correction case | mitigation did not restore trust |
+That should be enough to make the result uncomfortable: two-qubit gate count correlates with correlation error at `r ~= 0.60`, routed Aer collapse leaves only about one third of samples in the valid magnetization sector near `J2/J1 = 0.5`, and one mitigation case improves the energy number while worsening correlation error. SpinMesh treats that as a failed physical measurement, not a near miss.
 
-The practical message is simple: QAOA can still be studied, but SpinMesh treats runtime as an experimental variable and rejects quantum outputs when the execution body makes the physics less trustworthy than a classical fixed-sector reference.
+The practical message is blunt: QAOA can still be studied, but these outputs should not be trusted over the fixed-sector classical reference on the current workloads.
 
 ## Frustration-axis valid-ratio sweep
 
@@ -123,7 +123,7 @@ The study pipeline is organized around three explicit questions:
 - **Baselines**: exact search, greedy, local search, simulated annealing, random feasible search, classical BO surrogate
 - **Quantum layer**: proxy, Aer, and Runtime V2 runners with Dicke-state initialization for the constrained sector
 - **Optimization layer**: Fourier/direct parameterizations, BO/SPSA/random tuning, penalty epochs, checkpoint/resume
-- **Tracking and reporting**: JSON/CSV/SQLite, findings reports, performance profiles, utility frontiers, executive summaries
+- **Tracking and reporting**: JSON/CSV/SQLite, findings reports, trust reports, utility frontiers, executive summaries
 - **Decision layer**: cost-aware execution recommendation under matched runtime budgets
 - **Validation layer**: live certification, calibration snapshotting, live-vs-Aer validation helpers
 
